@@ -1,34 +1,85 @@
 {
   "kind": "coverage_report",
   "version": "1.0",
-  "generatedAt": "2026-02-27T05:57:50.650Z",
+  "generatedAt": "2026-02-27T07:54:32.856Z",
   "sources": {
     "buildRequest": true,
     "implementationPlan": true
   },
   "requirements": {
-    "total": 1,
-    "implemented": 1,
+    "total": 4,
+    "implemented": 4,
     "items": [
       {
         "id": "REQ-1",
-        "summary": "Change the logo background in the Header component from the current mosaic/white style to a bluish color. Replace any white, light, or mosaic-patterned background behind the logo with a deep or medium blue tone (e.g., a solid or subtle gradient blue such as #1a3a6b or a cosmic blue hue) that complements the existing dark cosmic theme of the app.",
+        "summary": "Add a dedicated 'About Vijay Sawkar' bio section on the About page that includes his personal background, years of experience, notable achievements, and certifications/qualifications in Vedic Astrology, Vastu, and Gemstone Therapy. This section must be visible and prominent when users visit the About page.",
         "status": "implemented",
         "plannedFiles": [
+          "frontend/src/pages/About.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/pages/About.tsx"
+        ]
+      },
+      {
+        "id": "REQ-2",
+        "summary": "Remove 'Numerology' from the Available Services section on the Services page. Ensure no Numerology entry appears in the services list or any related UI components (e.g., Footer services list, Home page service highlights).",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/pages/Services.tsx",
+          "frontend/src/components/Footer.tsx",
+          "frontend/src/pages/Home.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/pages/Services.tsx",
+          "frontend/src/components/Footer.tsx",
+          "frontend/src/pages/Home.tsx"
+        ]
+      },
+      {
+        "id": "REQ-3",
+        "summary": "Add 'New Kundali' (Kundali preparation/creation) as a distinct service entry in the Services page. Include a description explaining what the service covers and list available consultation modes (online/offline). Also add it to the booking consultation type options if applicable.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/pages/Services.tsx",
+          "frontend/src/pages/BookConsultation.tsx"
+        ],
+        "matchedFiles": [
+          "frontend/src/pages/Services.tsx",
+          "frontend/src/pages/BookConsultation.tsx"
+        ]
+      },
+      {
+        "id": "REQ-4",
+        "summary": "Add a dedicated photo and video gallery section to the website. Admin users (authenticated via Internet Identity) should be able to upload photos and videos; all visitors should be able to view them. This gallery area should be accessible from the main navigation or a dedicated page, and support displaying both images and video media. Reuse the existing backend blob storage and the media gallery pattern already present in Contact.tsx if applicable.",
+        "status": "implemented",
+        "plannedFiles": [
+          "frontend/src/pages/Gallery.tsx",
+          "frontend/src/App.tsx",
           "frontend/src/components/Header.tsx"
         ],
         "matchedFiles": [
+          "frontend/src/pages/Gallery.tsx",
+          "frontend/src/App.tsx",
           "frontend/src/components/Header.tsx"
         ]
       }
     ]
   },
   "changedFiles": [
+    "backend/main.mo",
     "build-request.json",
     "feature_evidence.json",
     "frontend-file-summaries.txt",
     "frontend-implementation-plan.json",
+    "frontend/src/App.tsx",
+    "frontend/src/components/Footer.tsx",
     "frontend/src/components/Header.tsx",
+    "frontend/src/pages/About.tsx",
+    "frontend/src/pages/BookConsultation.tsx",
+    "frontend/src/pages/Gallery.tsx",
+    "frontend/src/pages/Home.tsx",
+    "frontend/src/pages/Services.tsx",
     "project_state.json",
     "scratch/component-selection.json",
     "spec.md",

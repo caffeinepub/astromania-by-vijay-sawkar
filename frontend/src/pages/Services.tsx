@@ -1,287 +1,233 @@
+import { Star, CheckCircle, Clock, Monitor, Users, ChevronRight } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
-import { ChevronRight, Sparkles, Video, Phone, MapPin, Clock } from 'lucide-react';
 
-const SERVICE_CATEGORIES = [
+const services = [
   {
-    icon: '🔮',
+    id: 'vedic-astrology',
+    emoji: '🔭',
     title: 'Vedic Astrology',
     subtitle: 'Jyotish Shastra',
-    description: 'Comprehensive birth chart analysis using ancient Vedic principles to illuminate your life path, karmic patterns, and future possibilities.',
-    services: [
-      'Janam Kundali (Birth Chart) Analysis',
-      'Dasha & Antardasha Predictions',
+    description:
+      'Unlock the secrets of your birth chart with classical Parashari and Jaimini Vedic Astrology. Get precise predictions on career, relationships, health, and finances.',
+    includes: [
+      'Birth Chart (Kundali) Analysis',
+      'Planetary Dasha & Antardasha',
+      'Transit (Gochar) Predictions',
+      'Remedial Measures',
       'Annual Horoscope (Varshaphal)',
-      'Career & Finance Guidance',
-      'Health & Wellness Astrology',
-      'Spiritual Growth Consultation',
     ],
-    color: '#C9A84C',
+    modes: ['Online', 'Offline'],
+    duration: '60–90 min',
+    color: 'from-yellow-500/20 to-orange-500/10',
+    border: 'border-yellow-500/30',
+    accent: 'text-yellow-400',
   },
   {
-    icon: '🏠',
+    id: 'vastu-shastra',
+    emoji: '🏠',
     title: 'Vastu Shastra',
-    subtitle: 'Sacred Space Science',
-    description: 'Transform your living and working environments by aligning them with cosmic energy principles for harmony, prosperity, and well-being.',
-    services: [
-      'Home Vastu Analysis & Correction',
-      'Office & Commercial Space Vastu',
-      'Plot & Land Selection',
-      'New Construction Vastu Planning',
-      'Vastu Remedies (Without Demolition)',
-      'Factory & Industrial Vastu',
+    subtitle: 'Space Energy Alignment',
+    description:
+      'Harmonize your living and working spaces with the five elements and directional energies of Vastu Shastra for prosperity, health, and peace.',
+    includes: [
+      'Home / Office Vastu Audit',
+      'Floor Plan Analysis',
+      'Directional Corrections',
+      'Remedies Without Demolition',
+      'New Property Guidance',
     ],
-    color: '#5BC8D4',
+    modes: ['Online', 'Offline', 'Site Visit'],
+    duration: '90–120 min',
+    color: 'from-green-500/20 to-emerald-500/10',
+    border: 'border-green-500/30',
+    accent: 'text-green-400',
   },
   {
-    icon: '💎',
+    id: 'gemstone-therapy',
+    emoji: '💎',
     title: 'Gemstone Therapy',
     subtitle: 'Ratna Shastra',
-    description: 'Harness the healing and amplifying power of natural gemstones, prescribed based on your unique birth chart for maximum planetary benefit.',
-    services: [
-      'Personalized Gemstone Prescription',
-      'Certified Natural Gemstones',
-      'Gemstone Energization Rituals',
-      'Planetary Remedy Stones',
-      'Gemstone Quality Assessment',
-      'Wearing Guidance & Protocols',
+    description:
+      'Harness the healing and energizing power of natural gemstones prescribed according to your unique planetary configuration for maximum benefit.',
+    includes: [
+      'Personalized Gemstone Recommendation',
+      'Planetary Strength Analysis',
+      'Wearing Procedure & Mantras',
+      'Certification Guidance',
+      'Follow-up Consultation',
     ],
-    color: '#C9A84C',
+    modes: ['Online', 'Offline'],
+    duration: '45–60 min',
+    color: 'from-cyan-500/20 to-blue-500/10',
+    border: 'border-cyan-500/30',
+    accent: 'text-cyan-400',
   },
   {
-    icon: '📅',
+    id: 'muhurta',
+    emoji: '⏰',
     title: 'Muhurta',
     subtitle: 'Auspicious Timing',
-    description: 'Identify the most favorable cosmic windows for your important life events, ensuring they begin under the most auspicious planetary alignments.',
-    services: [
-      'Marriage Muhurta Selection',
+    description:
+      'Choose the most auspicious date and time for your important life events — weddings, business launches, property purchases, travel, and more.',
+    includes: [
+      'Marriage Muhurta',
       'Business Launch Timing',
-      'Property Purchase Muhurta',
-      'Travel & Journey Timing',
-      'Medical Procedure Timing',
-      'Naming Ceremony Muhurta',
+      'Property Purchase Date',
+      'Naming Ceremony (Namkaran)',
+      'Travel & Journey Muhurta',
     ],
-    color: '#5BC8D4',
+    modes: ['Online', 'Offline'],
+    duration: '30–45 min',
+    color: 'from-purple-500/20 to-violet-500/10',
+    border: 'border-purple-500/30',
+    accent: 'text-purple-400',
   },
   {
-    icon: '🔢',
-    title: 'Numerology',
-    subtitle: 'Anka Shastra',
-    description: 'Discover the hidden numerical patterns in your name and birth date that shape your personality, destiny, and life opportunities.',
-    services: [
-      'Life Path Number Analysis',
-      'Name Numerology & Correction',
-      'Business Name Numerology',
-      'Lucky Numbers & Dates',
-      'Compatibility Analysis',
-      'Personal Year Forecast',
-    ],
-    color: '#C9A84C',
-  },
-  {
-    icon: '⭐',
+    id: 'kundali-matching',
+    emoji: '💑',
     title: 'Kundali Matching',
-    subtitle: 'Vivah Compatibility',
-    description: 'Thorough horoscope compatibility analysis for marriage, examining all 36 gunas and beyond for a harmonious and lasting union.',
-    services: [
-      '36 Guna Milan Analysis',
-      'Mangal Dosha Assessment',
-      'Nadi Dosha Evaluation',
-      'Compatibility Report',
+    subtitle: 'Vivah Milan',
+    description:
+      'Ensure a harmonious and prosperous marriage with comprehensive horoscope compatibility analysis using traditional Ashtakoot and Dashakoot methods.',
+    includes: [
+      'Ashtakoot Guna Milan (36 Points)',
+      'Mangal Dosha Analysis',
+      'Nadi Dosha Check',
+      'Longevity & Compatibility',
       'Remedies for Doshas',
-      'Auspicious Wedding Dates',
     ],
-    color: '#5BC8D4',
-  },
-];
-
-const CONSULTATION_MODES = [
-  {
-    icon: MapPin,
-    title: 'In-Person',
-    description: 'Visit our Goa office for a face-to-face consultation in a serene, sacred environment.',
-    detail: 'Goa, India',
+    modes: ['Online', 'Offline'],
+    duration: '60 min',
+    color: 'from-pink-500/20 to-rose-500/10',
+    border: 'border-pink-500/30',
+    accent: 'text-pink-400',
   },
   {
-    icon: Video,
-    title: 'Video Call',
-    description: 'Connect from anywhere in the world via Zoom, Google Meet, or WhatsApp video.',
-    detail: 'Worldwide',
-  },
-  {
-    icon: Phone,
-    title: 'Phone Call',
-    description: 'Convenient telephonic consultation for quick guidance and follow-up sessions.',
-    detail: 'Available Daily',
-  },
-  {
-    icon: Clock,
-    title: 'Flexible Timing',
-    description: 'Morning, afternoon, and evening slots available to suit your schedule.',
-    detail: '9 AM – 8 PM IST',
+    id: 'new-kundali',
+    emoji: '📜',
+    title: 'New Kundali',
+    subtitle: 'Kundali Preparation',
+    description:
+      'Get a detailed, hand-crafted birth chart (Kundali) prepared with complete planetary positions, house analysis, and a comprehensive astrological report for your lifetime reference.',
+    includes: [
+      'Complete Birth Chart Preparation',
+      'All 16 Divisional Charts (Shodasvarga)',
+      'Planetary Strength (Shadbala)',
+      'Dasha Timeline for Life',
+      'Written Astrological Report',
+    ],
+    modes: ['Online', 'Offline'],
+    duration: '45–60 min',
+    color: 'from-amber-500/20 to-yellow-500/10',
+    border: 'border-amber-500/30',
+    accent: 'text-amber-400',
   },
 ];
 
 export default function Services() {
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#060818' }}>
+    <div className="min-h-screen bg-background text-foreground">
       {/* Hero */}
-      <section
-        className="py-20 px-4 sm:px-6 lg:px-8 text-center"
-        style={{
-          background: 'radial-gradient(ellipse at center top, rgba(30,20,80,0.6) 0%, #060818 60%)',
-        }}
-      >
-        <div className="max-w-4xl mx-auto">
-          <span
-            className="text-sm font-medium tracking-[0.3em] uppercase"
-            style={{ color: '#5BC8D4' }}
-          >
-            ✦ Sacred Services ✦
-          </span>
-          <h1
-            className="text-4xl md:text-6xl font-bold mt-4 mb-6 font-cinzel"
-            style={{ color: '#C9A84C', textShadow: '0 0 30px rgba(201,168,76,0.3)' }}
-          >
-            Our Offerings
+      <section className="relative py-20 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-cosmic-navy via-background to-background" />
+        <div
+          className="absolute inset-0 opacity-20"
+          style={{
+            backgroundImage:
+              'radial-gradient(circle at 30% 40%, oklch(0.75 0.18 55) 0%, transparent 50%), radial-gradient(circle at 70% 60%, oklch(0.65 0.15 200) 0%, transparent 50%)',
+          }}
+        />
+        <div className="relative max-w-6xl mx-auto px-4 text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-cosmic-gold/30 bg-cosmic-gold/10 text-cosmic-gold text-sm font-medium mb-6">
+            <Star className="w-4 h-4" />
+            Our Services
+          </div>
+          <h1 className="text-4xl md:text-6xl font-display font-bold mb-4 bg-gradient-to-r from-cosmic-gold via-yellow-300 to-cosmic-gold bg-clip-text text-transparent">
+            Vedic Sciences for Modern Life
           </h1>
-          <p className="text-xl font-cormorant italic mb-4" style={{ color: '#e8d5a3' }}>
-            Vijay Sawkar — Astrology and Vastu Expert
-          </p>
-          <p className="text-lg max-w-2xl mx-auto" style={{ color: '#b8c8d8' }}>
-            Ancient Vedic sciences applied with modern understanding to guide every aspect of your life journey.
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+            Ancient wisdom, practical guidance. Explore our comprehensive range of Vedic consultation services.
           </p>
         </div>
       </section>
 
-      {/* Service Categories */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-6xl mx-auto space-y-8">
-          {SERVICE_CATEGORIES.map((category) => (
-            <div
-              key={category.title}
-              className="rounded-2xl p-8 transition-all duration-300"
-              style={{
-                backgroundColor: 'rgba(20,25,60,0.8)',
-                border: `1px solid ${category.color}33`,
-              }}
-            >
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-                <div>
-                  <div className="flex items-center gap-4 mb-4">
-                    <span className="text-4xl">{category.icon}</span>
-                    <div>
-                      <h2
-                        className="text-2xl md:text-3xl font-bold font-cinzel"
-                        style={{ color: category.color }}
-                      >
-                        {category.title}
-                      </h2>
-                      <p className="text-sm italic" style={{ color: '#7a9ab0' }}>
-                        {category.subtitle}
-                      </p>
-                    </div>
-                  </div>
-                  <p className="leading-relaxed" style={{ color: '#c8d8e8' }}>
-                    {category.description}
-                  </p>
-                  <div className="mt-6">
-                    <Link
-                      to="/book-consultation"
-                      className="inline-flex items-center gap-2 px-6 py-3 rounded-full font-semibold transition-all duration-300 hover:scale-105 text-sm"
-                      style={{
-                        background: `linear-gradient(135deg, ${category.color}, ${category.color}99)`,
-                        color: '#060818',
-                      }}
-                    >
-                      <Sparkles className="w-4 h-4" />
-                      Book This Service
-                    </Link>
-                  </div>
+      {/* Services Grid */}
+      <section className="py-16">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {services.map((service) => (
+              <div
+                key={service.id}
+                className={`group relative bg-gradient-to-br ${service.color} border ${service.border} rounded-2xl p-6 hover:scale-[1.02] transition-all duration-300 flex flex-col`}
+              >
+                {/* Header */}
+                <div className="mb-4">
+                  <span className="text-5xl mb-3 block">{service.emoji}</span>
+                  <h2 className={`text-xl font-bold ${service.accent} mb-1`}>{service.title}</h2>
+                  <p className="text-sm text-muted-foreground italic">{service.subtitle}</p>
                 </div>
-                <div>
-                  <h3
-                    className="text-sm font-medium tracking-wider uppercase mb-4"
-                    style={{ color: category.color }}
-                  >
-                    What&apos;s Included
-                  </h3>
-                  <ul className="space-y-2">
-                    {category.services.map((service) => (
-                      <li
-                        key={service}
-                        className="flex items-center gap-3 text-sm"
-                        style={{ color: '#c8d8e8' }}
-                      >
-                        {/* Fixed: flex-shrink-0 → shrink-0 */}
-                        <ChevronRight
-                          className="w-4 h-4 shrink-0"
-                          style={{ color: category.color }}
-                        />
-                        {service}
+
+                {/* Description */}
+                <p className="text-foreground/80 text-sm leading-relaxed mb-5">{service.description}</p>
+
+                {/* Includes */}
+                <div className="mb-5 flex-1">
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Includes</p>
+                  <ul className="space-y-1.5">
+                    {service.includes.map((item, i) => (
+                      <li key={i} className="flex items-start gap-2 text-sm text-foreground/80">
+                        <CheckCircle className={`w-4 h-4 shrink-0 mt-0.5 ${service.accent}`} />
+                        {item}
                       </li>
                     ))}
                   </ul>
                 </div>
+
+                {/* Footer */}
+                <div className="border-t border-white/10 pt-4 space-y-2">
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <Clock className="w-4 h-4 shrink-0" />
+                    <span>{service.duration}</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <Monitor className="w-4 h-4 shrink-0" />
+                    <span>{service.modes.join(' · ')}</span>
+                  </div>
+                </div>
+
+                {/* CTA */}
+                <Link
+                  to="/book-consultation"
+                  className={`mt-4 inline-flex items-center justify-center gap-2 w-full py-2.5 rounded-xl border ${service.border} ${service.accent} text-sm font-medium hover:bg-white/5 transition-colors`}
+                >
+                  Book This Service <ChevronRight className="w-4 h-4" />
+                </Link>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* Consultation Modes */}
-      <section
-        className="py-20 px-4 sm:px-6 lg:px-8"
-        style={{ backgroundColor: 'rgba(10,15,40,0.6)' }}
-      >
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <span
-              className="text-sm font-medium tracking-[0.3em] uppercase"
-              style={{ color: '#5BC8D4' }}
-            >
-              ✦ How We Connect ✦
-            </span>
-            <h2
-              className="text-3xl md:text-5xl font-bold mt-3 mb-4 font-cinzel"
-              style={{ color: '#C9A84C' }}
-            >
-              Consultation Modes
-            </h2>
+      {/* Why Choose Us */}
+      <section className="py-16 bg-cosmic-navy/20 border-t border-cosmic-gold/10">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-display font-bold text-cosmic-gold mb-3">Why Choose Vijay Sawkar?</h2>
+            <p className="text-muted-foreground max-w-xl mx-auto">
+              25+ years of authentic Vedic practice with thousands of satisfied clients
+            </p>
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {CONSULTATION_MODES.map((mode) => (
-              <div
-                key={mode.title}
-                className="p-6 rounded-xl text-center"
-                style={{
-                  backgroundColor: 'rgba(20,25,60,0.8)',
-                  border: '1px solid rgba(201,168,76,0.2)',
-                }}
-              >
-                <mode.icon
-                  className="w-10 h-10 mx-auto mb-4"
-                  style={{ color: '#C9A84C' }}
-                />
-                <h3
-                  className="text-lg font-bold mb-2 font-cinzel"
-                  style={{ color: '#C9A84C' }}
-                >
-                  {mode.title}
-                </h3>
-                <p className="text-sm mb-3 leading-relaxed" style={{ color: '#b8c8d8' }}>
-                  {mode.description}
-                </p>
-                <span
-                  className="text-xs font-medium px-3 py-1 rounded-full"
-                  style={{
-                    backgroundColor: 'rgba(91,200,212,0.15)',
-                    color: '#5BC8D4',
-                    border: '1px solid rgba(91,200,212,0.3)',
-                  }}
-                >
-                  {mode.detail}
-                </span>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              { icon: '🎓', title: 'Certified Expert', desc: 'Formally certified in Vedic Astrology, Vastu, and Gemstone Therapy' },
+              { icon: '⭐', title: '98% Accuracy', desc: 'Consistently high accuracy rate validated by thousands of clients' },
+              { icon: '🌐', title: 'Online & Offline', desc: 'Flexible consultation modes to suit your convenience' },
+              { icon: '🔒', title: 'Confidential', desc: 'All consultations are strictly private and confidential' },
+            ].map((item, i) => (
+              <div key={i} className="bg-cosmic-navy/50 border border-cosmic-gold/20 rounded-xl p-5 text-center">
+                <span className="text-4xl mb-3 block">{item.icon}</span>
+                <h3 className="font-semibold text-foreground mb-1">{item.title}</h3>
+                <p className="text-sm text-muted-foreground">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -289,33 +235,17 @@ export default function Services() {
       </section>
 
       {/* CTA */}
-      <section
-        className="py-20 px-4 sm:px-6 lg:px-8 text-center"
-        style={{
-          background: 'radial-gradient(ellipse at center, rgba(30,20,80,0.5) 0%, #060818 70%)',
-        }}
-      >
-        <div className="max-w-3xl mx-auto">
-          <h2
-            className="text-3xl md:text-5xl font-bold mb-6 font-cinzel"
-            style={{ color: '#C9A84C' }}
-          >
-            Ready to Begin?
-          </h2>
-          <p className="text-lg mb-10" style={{ color: '#b8c8d8' }}>
-            Vijay Sawkar — Astrology and Vastu Expert — is here to guide you. Book your personalized consultation today.
+      <section className="py-16">
+        <div className="max-w-3xl mx-auto px-4 text-center">
+          <h2 className="text-3xl font-display font-bold text-cosmic-gold mb-4">Ready to Begin?</h2>
+          <p className="text-muted-foreground mb-8">
+            Book your consultation today and take the first step towards cosmic clarity.
           </p>
           <Link
             to="/book-consultation"
-            className="inline-flex items-center gap-2 px-10 py-4 rounded-full font-bold text-lg transition-all duration-300 hover:scale-105"
-            style={{
-              background: 'linear-gradient(135deg, #C9A84C, #a07830)',
-              color: '#060818',
-              boxShadow: '0 4px 20px rgba(201,168,76,0.4)',
-            }}
+            className="inline-flex items-center gap-2 px-8 py-3 bg-cosmic-gold text-cosmic-navy font-semibold rounded-full hover:bg-yellow-400 transition-colors"
           >
-            <Sparkles className="w-5 h-5" />
-            Book Your Consultation
+            Book a Consultation <ChevronRight className="w-4 h-4" />
           </Link>
         </div>
       </section>

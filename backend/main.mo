@@ -92,12 +92,21 @@ actor {
     youtube : Text;
   };
 
+  type GalleryItem = {
+    id : Text;
+    name : Text;
+    blob : Storage.ExternalBlob;
+    type_ : Text; // "image" or "video"
+  };
+
   // State
   let gemstones = Map.empty<Text, Gemstone>();
   let reviews = Map.empty<Text, Review>();
   let cart = Map.empty<Text, [CartItem]>();
   let bookingRequests = Map.empty<Text, BookingRequest>();
   let contactSubmissions = Map.empty<Text, ContactSubmission>();
+  let gallery = Map.empty<Text, GalleryItem>();
+
   var socialMediaLinks : SocialMediaLinks = {
     instagram = "sawkar.v";
     facebook = "Vijay Sawkar";
@@ -200,15 +209,6 @@ actor {
   };
 
   // Media Gallery - public read, admin write
-  type GalleryItem = {
-    id : Text;
-    blob : Storage.ExternalBlob;
-    name : Text;
-    type_ : Text; // "image" or "video"
-  };
-
-  let gallery = Map.empty<Text, GalleryItem>();
-
   public shared ({ caller }) func addGalleryItem(name : Text, blob : Storage.ExternalBlob, type_ : Text) : async () {
     if (not (AccessControl.hasPermission(accessControlState, caller, #admin))) {
       Runtime.trap("Unauthorized: Only admins can add gallery items");

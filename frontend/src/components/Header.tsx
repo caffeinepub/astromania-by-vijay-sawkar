@@ -1,25 +1,27 @@
 import { useState } from 'react';
 import { Link, useLocation } from '@tanstack/react-router';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, LogIn, LogOut, Loader2 } from 'lucide-react';
 import { useInternetIdentity } from '../hooks/useInternetIdentity';
 import { useQueryClient } from '@tanstack/react-query';
 
 const navLinks = [
   { label: 'Home', path: '/' },
-  { label: 'Services', path: '/services' },
   { label: 'About', path: '/about' },
-  { label: 'Gemstones', path: '/gemstone-shop' },
+  { label: 'Services', path: '/services' },
+  { label: 'Gallery', path: '/gallery' },
+  { label: 'Gemstones', path: '/gemstones' },
   { label: 'Testimonials', path: '/testimonials' },
-  { label: 'Book Consultation', path: '/book-consultation' },
   { label: 'Contact', path: '/contact' },
 ];
 
 export default function Header() {
-  const [menuOpen, setMenuOpen] = useState(false);
-  const location = useLocation();
+  const [mobileOpen, setMobileOpen] = useState(false);
   const { login, clear, loginStatus, identity } = useInternetIdentity();
   const queryClient = useQueryClient();
+  const location = useLocation();
+
   const isAuthenticated = !!identity;
+  const isLoggingIn = loginStatus === 'logging-in';
 
   const handleAuth = async () => {
     if (isAuthenticated) {
@@ -28,8 +30,9 @@ export default function Header() {
     } else {
       try {
         await login();
-      } catch (error: any) {
-        if (error.message === 'User is already authenticated') {
+      } catch (error: unknown) {
+        const err = error as Error;
+        if (err?.message === 'User is already authenticated') {
           await clear();
           setTimeout(() => login(), 300);
         }
@@ -38,128 +41,115 @@ export default function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 backdrop-blur-md border-b shadow-cosmic"
-      style={{ backgroundColor: 'rgba(6, 8, 24, 0.96)', borderColor: 'rgba(0, 204, 255, 0.2)' }}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 shrink-0">
-            <div
-              className="h-14 w-14 flex items-center justify-center rounded-xl overflow-hidden"
-              style={{
-                background: 'linear-gradient(135deg, #0d2a6e 0%, #1a4fa8 50%, #0a3580 100%)',
-                boxShadow: '0 0 12px rgba(30, 100, 220, 0.5)',
-              }}
-            >
-              <img
-                src="/assets/generated/astro-vastu-logo.dim_512x512.png"
-                alt="Astro-Vastu Knowledge"
-                className="h-12 w-12 object-contain"
-              />
-            </div>
-            <div className="hidden sm:block">
-              <span className="font-display font-bold text-base leading-tight block"
-                style={{ color: '#f5c842' }}>
-                Astro-Vastu Knowledge
-              </span>
-              <span className="text-xs leading-tight block" style={{ color: '#00ccff' }}>
-                Vijay Sawkar
-              </span>
-            </div>
-          </Link>
-
-          {/* Desktop Nav */}
-          <nav className="hidden lg:flex items-center gap-1">
-            {navLinks.map((link) => (
-              <Link
-                key={link.path}
-                to={link.path}
-                className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  location.pathname === link.path
-                    ? 'bg-primary/15 text-primary'
-                    : 'hover:bg-secondary/50'
-                }`}
-                style={{
-                  color: location.pathname === link.path ? '#f5c842' : '#d8cfc0',
-                }}
-              >
-                {link.label}
-              </Link>
-            ))}
-          </nav>
-
-          {/* Auth + Mobile Menu */}
-          <div className="flex items-center gap-2">
-            <button
-              onClick={handleAuth}
-              disabled={loginStatus === 'logging-in'}
-              className={`hidden sm:flex px-4 py-1.5 rounded-full text-sm font-medium transition-all ${
-                isAuthenticated
-                  ? 'bg-secondary hover:bg-secondary/80'
-                  : 'hover:opacity-90'
-              } disabled:opacity-50`}
-              style={
-                isAuthenticated
-                  ? { color: '#f5efe0' }
-                  : { background: 'linear-gradient(135deg, #aa44ff, #dd00ff)', color: '#ffffff' }
-              }
-            >
-              {loginStatus === 'logging-in' ? 'Logging in...' : isAuthenticated ? 'Logout' : 'Login'}
-            </button>
-
-            <button
-              onClick={() => setMenuOpen(!menuOpen)}
-              className="lg:hidden p-2 rounded-lg hover:bg-secondary/50 transition-colors"
-              style={{ color: '#d8cfc0' }}
-              aria-label="Toggle menu"
-            >
-              {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-            </button>
+    <header className="sticky top-0 z-40 border-b border-cosmic-gold/20 shadow-lg"
+      style={{ background: 'linear-gradient(135deg, oklch(0.18 0.04 240) 0%, oklch(0.22 0.06 230) 60%, oklch(0.26 0.08 220) 100%)', boxShadow: '0 0 30px oklch(0.55 0.12 220 / 0.25)' }}>
+      <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+        {/* Logo */}
+        <Link to="/" className="flex items-center gap-3 shrink-0">
+          <img
+            src="/assets/generated/astro-vastu-logo.dim_512x512.png"
+            alt="Astro-Vastu Knowledge"
+            className="h-10 w-10 rounded-full object-cover border border-cosmic-gold/40"
+          />
+          <div className="hidden sm:block">
+            <p className="text-sm font-bold text-cosmic-gold leading-tight">Astro-Vastu Knowledge</p>
+            <p className="text-xs text-muted-foreground leading-tight">Vijay Sawkar</p>
           </div>
-        </div>
+        </Link>
 
-        {/* Mobile Menu */}
-        {menuOpen && (
-          <div className="lg:hidden border-t py-3 space-y-1"
-            style={{ borderColor: 'rgba(0, 204, 255, 0.2)' }}>
-            {navLinks.map((link) => (
+        {/* Desktop Nav */}
+        <nav className="hidden lg:flex items-center gap-1">
+          {navLinks.map(link => {
+            const isActive = location.pathname === link.path;
+            return (
               <Link
                 key={link.path}
                 to={link.path}
-                onClick={() => setMenuOpen(false)}
-                className={`block px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                  location.pathname === link.path
-                    ? 'bg-primary/15'
-                    : 'hover:bg-secondary/50'
+                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
+                  isActive
+                    ? 'bg-cosmic-gold/20 text-cosmic-gold'
+                    : 'text-foreground/70 hover:text-foreground hover:bg-white/5'
                 }`}
-                style={{
-                  color: location.pathname === link.path ? '#f5c842' : '#d8cfc0',
-                }}
               >
                 {link.label}
               </Link>
-            ))}
-            <div className="pt-2 px-4">
+            );
+          })}
+        </nav>
+
+        {/* Auth + Mobile Toggle */}
+        <div className="flex items-center gap-3">
+          <button
+            onClick={handleAuth}
+            disabled={isLoggingIn}
+            className={`hidden sm:inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
+              isAuthenticated
+                ? 'bg-white/10 hover:bg-white/20 text-foreground/80'
+                : 'bg-cosmic-gold/20 hover:bg-cosmic-gold/30 text-cosmic-gold border border-cosmic-gold/30'
+            } disabled:opacity-50`}
+          >
+            {isLoggingIn ? (
+              <><Loader2 className="w-3.5 h-3.5 animate-spin" /> Logging in...</>
+            ) : isAuthenticated ? (
+              <><LogOut className="w-3.5 h-3.5" /> Logout</>
+            ) : (
+              <><LogIn className="w-3.5 h-3.5" /> Login</>
+            )}
+          </button>
+
+          <button
+            className="lg:hidden p-2 rounded-lg text-foreground/70 hover:text-foreground hover:bg-white/5 transition-colors"
+            onClick={() => setMobileOpen(v => !v)}
+            aria-label="Toggle menu"
+          >
+            {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Menu */}
+      {mobileOpen && (
+        <div className="lg:hidden border-t border-cosmic-gold/10 bg-cosmic-navy/95 backdrop-blur-sm">
+          <nav className="max-w-7xl mx-auto px-4 py-3 flex flex-col gap-1">
+            {navLinks.map(link => {
+              const isActive = location.pathname === link.path;
+              return (
+                <Link
+                  key={link.path}
+                  to={link.path}
+                  onClick={() => setMobileOpen(false)}
+                  className={`px-4 py-2.5 rounded-xl text-sm font-medium transition-colors ${
+                    isActive
+                      ? 'bg-cosmic-gold/20 text-cosmic-gold'
+                      : 'text-foreground/70 hover:text-foreground hover:bg-white/5'
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
+            <div className="pt-2 border-t border-cosmic-gold/10 mt-1">
               <button
-                onClick={() => { handleAuth(); setMenuOpen(false); }}
-                disabled={loginStatus === 'logging-in'}
-                className={`w-full py-2 rounded-full text-sm font-medium transition-all ${
+                onClick={() => { handleAuth(); setMobileOpen(false); }}
+                disabled={isLoggingIn}
+                className={`w-full px-4 py-2.5 rounded-xl text-sm font-medium transition-colors text-left flex items-center gap-2 ${
                   isAuthenticated
-                    ? 'bg-secondary hover:bg-secondary/80'
-                    : 'hover:opacity-90'
+                    ? 'text-foreground/70 hover:bg-white/5'
+                    : 'text-cosmic-gold hover:bg-cosmic-gold/10'
                 } disabled:opacity-50`}
-                style={
-                  isAuthenticated
-                    ? { color: '#f5efe0' }
-                    : { background: 'linear-gradient(135deg, #aa44ff, #dd00ff)', color: '#ffffff' }
-                }
               >
-                {loginStatus === 'logging-in' ? 'Logging in...' : isAuthenticated ? 'Logout' : 'Login'}
+                {isLoggingIn ? (
+                  <><Loader2 className="w-4 h-4 animate-spin" /> Logging in...</>
+                ) : isAuthenticated ? (
+                  <><LogOut className="w-4 h-4" /> Logout</>
+                ) : (
+                  <><LogIn className="w-4 h-4" /> Login</>
+                )}
               </button>
             </div>
-          </div>
-        )}
-      </div>
+          </nav>
+        </div>
+      )}
     </header>
   );
 }
