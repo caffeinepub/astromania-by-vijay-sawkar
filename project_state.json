@@ -1,0 +1,29 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 3,
+  "summary": "Web project with a logo area. User wants the logo background changed from a mosaic/white style to a bluish color.",
+  "architectural_notes": [],
+  "known_issues": [],
+  "isFixRequest": false,
+  "existing_features": [
+    {
+      "id": "feature-change-the-logo-background-in-the-header-component-from-the-current-mosaic-white-style-to-a-bluish-color-replace-any-white-light-or-mosaic-patterned-background-behind-the-logo-with-a-deep-or-medium-blue-tone-e-g-a-solid-or-subtle-gradient-blue-such-as-1a3a6b-or-a-cosmic-blue-hue-that-complements-the-existing-dark-cosmic-theme-of-the-app",
+      "title": "Change the logo background in the Header component from the current mosaic/white style to a bluish color. Replace any white, light, or mosaic-patterned background behind the logo with a deep or medium blue tone (e.g., a solid or subtle gradient blue such as #1a3a6b or a cosmic blue hue) that complements the existing dark cosmic theme of the app.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Change logo background from mosaic/white to a bluish color",
+      "reqIds": [],
+      "status": "pending"
+    }
+  ],
+  "projectName": "Astromania",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}

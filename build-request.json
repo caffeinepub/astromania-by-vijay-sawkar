@@ -1,0 +1,40 @@
+{
+  "kind": "build_request",
+  "title": "Change logo background from mosaic/white to bluish",
+  "projectName": "Astromania",
+  "priority": "normal",
+  "requirements": [
+    {
+      "id": "REQ-1",
+      "text": "Change the logo background in the Header component from the current mosaic/white style to a bluish color. Replace any white, light, or mosaic-patterned background behind the logo with a deep or medium blue tone (e.g., a solid or subtle gradient blue such as #1a3a6b or a cosmic blue hue) that complements the existing dark cosmic theme of the app.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-4"
+        ],
+        "quotes": [
+          "Can u change the background of logo from mosaic write to bluish something"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The logo area in the Header no longer has a white or mosaic-patterned background.",
+        "The logo background is visibly bluish and harmonizes with the dark cosmic theme.",
+        "The logo image and text remain clearly visible against the new blue background.",
+        "The change is consistent across desktop and mobile views."
+      ]
+    }
+  ],
+  "constraints": [
+    "Do not modify any files under frontend/src/hooks/ or frontend/src/components/ui (immutable paths).",
+    "The new blue background must remain consistent with the existing dark cosmic theme."
+  ],
+  "nonGoals": [
+    "Changing any other part of the Header layout or navigation.",
+    "Modifying the logo image itself.",
+    "Changing backgrounds on any other page or component."
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  }
+}

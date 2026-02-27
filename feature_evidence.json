@@ -1,0 +1,25 @@
+{
+  "kind": "feature_evidence_report",
+  "features": [
+    {
+      "featureId": "feature-change-the-logo-background-in-the-header-component-from-the-current-mosaic-white-style-to-a-bluish-color-replace-any-white-light-or-mosaic-patterned-background-behind-the-logo-with-a-deep-or-medium-blue-tone-e-g-a-solid-or-subtle-gradient-blue-such-as-1a3a6b-or-a-cosmic-blue-hue-that-complements-the-existing-dark-cosmic-theme-of-the-app",
+      "featureTitle": "Change the logo background in the Header component from the current mosaic/white style to a bluish color. Replace any white, light, or mosaic-patterned background behind the logo with a deep or medium blue tone (e.g., a solid or subtle gradient blue such as #1a3a6b or a cosmic blue hue) that complements the existing dark cosmic theme of the app.",
+      "files": [
+        "frontend/src/components/Header.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-1"
+      ],
+      "confidence": "high"
+    }
+  ]
+}
