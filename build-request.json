@@ -1,35 +1,54 @@
 {
   "kind": "build_request",
-  "title": "Remove date from Vastu Advance Course section",
-  "priority": "high",
+  "title": "Fix location link and allow photo replacement in Services page",
+  "priority": "normal",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "In the Services page (or wherever the Vastu Advance Course is displayed), remove any date or date-related text (e.g., course start date, batch date, upcoming date) from the Vastu Advance Course entry.",
+      "text": "Update the Google Maps location link in the Footer component (frontend/src/components/Footer.tsx) to point to the correct office address for Vijay Sawkar's practice. Ensure the link opens in a new tab and displays the correct address text.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-latest"
+          "msg-3"
         ],
         "quotes": [
-          "In the vastu advance course remove the date!!!!"
+          "u didn't update the location either"
         ]
       },
       "acceptanceCriteria": [
-        "No date text is visible in the Vastu Advance Course section.",
-        "All other content in the Vastu Advance Course section remains unchanged.",
-        "No date is shown in any card, detail panel, or modal related to the Vastu Advance Course."
+        "The Google Maps link in the footer navigates to the correct business location",
+        "The link opens in a new tab",
+        "The displayed address text matches the actual location"
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "text": "In the Services page (frontend/src/pages/Services.tsx), replace the placeholder photo boxes in the Vastu Advance Course section with actual uploaded certificate or course images. If the correct image files cannot be determined automatically, render clearly labeled placeholder img tags with empty src attributes and alt text such as 'Course Photo 1' and 'Course Photo 2' so the user can manually supply the image files.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-3"
+        ],
+        "quotes": [
+          "u didn't change the photos, if u can't atleast let me"
+        ]
+      },
+      "acceptanceCriteria": [
+        "The Vastu Advance Course section in Services.tsx shows actual img elements instead of empty div placeholders",
+        "Each img element has a descriptive alt attribute",
+        "If images are not available, the img src attributes are clearly marked so the user can supply the correct file paths",
+        "The layout and styling of the image containers is preserved"
       ]
     }
   ],
   "constraints": [
-    "Do not remove or alter any other fields or content in the Vastu Advance Course section besides the date.",
-    "Do not modify any immutable frontend paths."
+    "Do not modify any files listed under frontend.immutablePaths",
+    "Preserve the existing cosmic dark theme and layout styling"
   ],
   "nonGoals": [
-    "Removing dates from other courses or sections.",
-    "Any backend changes.",
-    "Redesigning the Services or course layout."
+    "Adding new pages or sections",
+    "Changing the backend schema or data model",
+    "Modifying any other parts of the Services page beyond the Vastu Advance Course photo section"
   ],
   "imageRequirements": {
     "required": [],

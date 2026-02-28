@@ -1,5 +1,10 @@
-import { useState } from 'react';
-import { ArrowRight, Star, Clock, Users, CheckCircle, Phone, MessageCircle } from 'lucide-react';
+import { useState, useRef } from 'react';
+import { ArrowRight, Star, Clock, Users, CheckCircle, Phone, MessageCircle, Upload, Loader2, Trash2 } from 'lucide-react';
+import { useInternetIdentity } from '../hooks/useInternetIdentity';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useActor } from '../hooks/useActor';
+import { ExternalBlob } from '../backend';
+import { toast } from 'sonner';
 
 const services = [
   {
@@ -118,6 +123,217 @@ const services = [
     popular: false
   }
 ];
+
+// IDs used to store/retrieve course certificate photos in the gallery backend
+const CERT_PHOTO_IDS = ['vastu-course-cert-photo-1', 'vastu-course-cert-photo-2'];
+
+// Fallback static images if no uploaded photos exist
+const FALLBACK_CERT_IMAGES = [
+  {
+    id: CERT_PHOTO_IDS[0],
+    src: '/assets/generated/vastu-advance-cert-1.dim_1080x763.jpg',
+    alt: 'Vastu Advance Course Certificate 1',
+  },
+  {
+    id: CERT_PHOTO_IDS[1],
+    src: '/assets/generated/vastu-advance-cert-2.dim_1080x763.jpg',
+    alt: 'Vastu Advance Course Certificate 2',
+  },
+];
+
+function useIsAdmin() {
+  const { actor, isFetching } = useActor();
+  const { identity } = useInternetIdentity();
+  return useQuery({
+    queryKey: ['isAdmin'],
+    queryFn: async () => {
+      if (!actor) return false;
+      return actor.isCallerAdmin();
+    },
+    enabled: !!actor && !isFetching && !!identity,
+  });
+}
+
+function useGalleryItems() {
+  const { actor, isFetching } = useActor();
+  return useQuery({
+    queryKey: ['galleryItems'],
+    queryFn: async () => {
+      if (!actor) return [];
+      return actor.getGalleryItems();
+    },
+    enabled: !!actor && !isFetching,
+  });
+}
+
+interface CertPhoto {
+  id: string;
+  src: string;
+  alt: string;
+  isUploaded?: boolean;
+}
+
+function VastuCertificates() {
+  const { identity } = useInternetIdentity();
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+  const { data: isAdmin } = useIsAdmin();
+  const { data: galleryItems = [] } = useGalleryItems();
+
+  const fileInputRefs = [useRef<HTMLInputElement>(null), useRef<HTMLInputElement>(null)];
+  const [uploadProgress, setUploadProgress] = useState<{ [key: string]: number }>({});
+
+  // Build the cert photos: prefer uploaded gallery items, fall back to static
+  const certPhotos: CertPhoto[] = FALLBACK_CERT_IMAGES.map((fallback) => {
+    const uploaded = galleryItems.find((item) => item.id === fallback.id);
+    if (uploaded) {
+      return {
+        id: fallback.id,
+        src: uploaded.blob.getDirectURL(),
+        alt: fallback.alt,
+        isUploaded: true,
+      };
+    }
+    return { ...fallback, isUploaded: false };
+  });
+
+  const uploadMutation = useMutation({
+    mutationFn: async ({ file, slotId }: { file: File; slotId: string }) => {
+      if (!actor) throw new Error('Not connected');
+      const arrayBuffer = await file.arrayBuffer();
+      const bytes = new Uint8Array(arrayBuffer);
+      const blob = ExternalBlob.fromBytes(bytes).withUploadProgress((pct) => {
+        setUploadProgress((prev) => ({ ...prev, [slotId]: pct }));
+      });
+      await actor.addGalleryItem(slotId, blob, 'image');
+    },
+    onSuccess: (_data, variables) => {
+      setUploadProgress((prev) => {
+        const next = { ...prev };
+        delete next[variables.slotId];
+        return next;
+      });
+      queryClient.invalidateQueries({ queryKey: ['galleryItems'] });
+      toast.success('Certificate photo uploaded!');
+    },
+    onError: (_err, variables) => {
+      setUploadProgress((prev) => {
+        const next = { ...prev };
+        delete next[variables.slotId];
+        return next;
+      });
+      toast.error('Failed to upload photo.');
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: async (id: string) => {
+      if (!actor) throw new Error('Not connected');
+      await actor.deleteGalleryItem(id);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['galleryItems'] });
+      toast.success('Photo removed. Fallback image restored.');
+    },
+    onError: () => {
+      toast.error('Failed to remove photo.');
+    },
+  });
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, slotId: string) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      uploadMutation.mutate({ file, slotId });
+    }
+    if (e.target) e.target.value = '';
+  };
+
+  return (
+    <div className="mt-8 pt-8 border-t border-border">
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-lg font-semibold text-foreground flex items-center gap-2">
+          <CheckCircle className="w-5 h-5 text-primary" />
+          Certificates
+        </h3>
+        {isAdmin && identity && (
+          <p className="text-xs text-muted-foreground italic">Admin: click the upload button on each photo to replace it</p>
+        )}
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {certPhotos.map((cert, idx) => {
+          const isUploading = uploadMutation.isPending && uploadMutation.variables?.slotId === cert.id;
+          const progress = uploadProgress[cert.id];
+          return (
+            <div key={cert.id} className="relative rounded-lg overflow-hidden border border-primary/20 shadow-md group">
+              <img
+                src={cert.src}
+                alt={cert.alt}
+                className="w-full h-auto object-contain"
+                onError={(e) => {
+                  // If static fallback also fails, show a placeholder
+                  const target = e.currentTarget;
+                  target.style.display = 'none';
+                  const parent = target.parentElement;
+                  if (parent && !parent.querySelector('.img-fallback')) {
+                    const placeholder = document.createElement('div');
+                    placeholder.className = 'img-fallback flex items-center justify-center h-48 bg-muted text-muted-foreground text-sm';
+                    placeholder.textContent = cert.alt;
+                    parent.appendChild(placeholder);
+                  }
+                }}
+              />
+
+              {/* Upload overlay for admin */}
+              {isAdmin && identity && (
+                <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-3">
+                  {isUploading ? (
+                    <div className="flex flex-col items-center gap-2">
+                      <Loader2 className="w-6 h-6 text-white animate-spin" />
+                      <span className="text-white text-sm">{progress != null ? `${progress}%` : 'Uploading...'}</span>
+                    </div>
+                  ) : (
+                    <>
+                      <button
+                        onClick={() => fileInputRefs[idx].current?.click()}
+                        className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors"
+                      >
+                        <Upload className="w-4 h-4" />
+                        {cert.isUploaded ? 'Replace Photo' : 'Upload Photo'}
+                      </button>
+                      {cert.isUploaded && (
+                        <button
+                          onClick={() => deleteMutation.mutate(cert.id)}
+                          disabled={deleteMutation.isPending}
+                          className="flex items-center gap-2 px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 transition-colors disabled:opacity-50"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                          Remove
+                        </button>
+                      )}
+                    </>
+                  )}
+                </div>
+              )}
+
+              <input
+                ref={fileInputRefs[idx]}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => handleFileChange(e, cert.id)}
+              />
+            </div>
+          );
+        })}
+      </div>
+      {isAdmin && identity && (
+        <p className="text-xs text-muted-foreground mt-3 text-center">
+          Hover over a certificate photo and click "Upload Photo" to replace it with your own image.
+        </p>
+      )}
+    </div>
+  );
+}
 
 export default function Services() {
   const [selectedService, setSelectedService] = useState<string | null>(null);
@@ -257,6 +473,9 @@ export default function Services() {
                   </div>
                 </div>
               </div>
+
+              {/* Certificate photos — shown only for Vastu Advance Course */}
+              {selectedServiceData.id === 'vastu-advance' && <VastuCertificates />}
             </div>
           </div>
         </section>

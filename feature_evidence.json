@@ -2,8 +2,28 @@
   "kind": "feature_evidence_report",
   "features": [
     {
-      "featureId": "feature-in-the-services-page-or-wherever-the-vastu-advance-course-is-displayed-remove-any-date-or-date-related-text-e-g-course-start-date-batch-date-upcoming-date-from-the-vastu-advance-course-entry",
-      "featureTitle": "In the Services page (or wherever the Vastu Advance Course is displayed), remove any date or date-related text (e.g., course start date, batch date, upcoming date) from the Vastu Advance Course entry.",
+      "featureId": "feature-update-the-google-maps-location-link-in-the-footer-component-frontend-src-components-footer-tsx-to-point-to-the-correct-office-address-for-vijay-sawkar-s-practice-ensure-the-link-opens-in-a-new-tab-and-displays-the-correct-address-text",
+      "featureTitle": "Update the Google Maps location link in the Footer component (frontend/src/components/Footer.tsx) to point to the correct office address for Vijay Sawkar's practice. Ensure the link opens in a new tab and displays the correct address text.",
+      "files": [
+        "frontend/src/components/Footer.tsx"
+      ],
+      "components": [
+        "authorization@4.0.0",
+        "blob-storage@4.0.0",
+        "core-infrastructure@1.0.2",
+        "shadcn-ui@1.0.0",
+        "build-template-react@1.0.0",
+        "initial-app@1.0.0",
+        "github-export-icp-cli@1.0.0"
+      ],
+      "testIds": [
+        "REQ-1"
+      ],
+      "confidence": "high"
+    },
+    {
+      "featureId": "feature-in-the-services-page-frontend-src-pages-services-tsx-replace-the-placeholder-photo-boxes-in-the-vastu-advance-course-section-with-actual-uploaded-certificate-or-course-images-if-the-correct-image-files-cannot-be-determined-automatically-render-clearly-labeled-placeholder-img-tags-with-empty-src-attributes-and-alt-text-such-as-course-photo-1-and-course-photo-2-so-the-user-can-manually-supply-the-image-files",
+      "featureTitle": "In the Services page (frontend/src/pages/Services.tsx), replace the placeholder photo boxes in the Vastu Advance Course section with actual uploaded certificate or course images. If the correct image files cannot be determined automatically, render clearly labeled placeholder img tags with empty src attributes and alt text such as 'Course Photo 1' and 'Course Photo 2' so the user can manually supply the image files.",
       "files": [
         "frontend/src/pages/Services.tsx"
       ],
@@ -17,7 +37,7 @@
         "github-export-icp-cli@1.0.0"
       ],
       "testIds": [
-        "REQ-1"
+        "REQ-2"
       ],
       "confidence": "high"
     }

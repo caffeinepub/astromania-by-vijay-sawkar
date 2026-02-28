@@ -3,27 +3,31 @@
   "projectStateVersion": 3,
   "summary": "New project",
   "architectural_notes": [],
-  "known_issues": [],
-  "isFixRequest": false,
+  "known_issues": [
+    "Location link not updated as requested",
+    "Photos not updated as requested"
+  ],
+  "isFixRequest": true,
   "existing_features": [
     {
-      "id": "feature-in-the-services-page-or-wherever-the-vastu-advance-course-is-displayed-remove-any-date-or-date-related-text-e-g-course-start-date-batch-date-upcoming-date-from-the-vastu-advance-course-entry",
-      "title": "In the Services page (or wherever the Vastu Advance Course is displayed), remove any date or date-related text (e.g., course start date, batch date, upcoming date) from the Vastu Advance Course entry.",
+      "id": "feature-update-the-google-maps-location-link-in-the-footer-component-frontend-src-components-footer-tsx-to-point-to-the-correct-office-address-for-vijay-sawkar-s-practice-ensure-the-link-opens-in-a-new-tab-and-displays-the-correct-address-text",
+      "title": "Update the Google Maps location link in the Footer component (frontend/src/components/Footer.tsx) to point to the correct office address for Vijay Sawkar's practice. Ensure the link opens in a new tab and displays the correct address text.",
       "reqIds": [
         "REQ-1"
       ],
       "version": 1
-    }
-  ],
-  "new_feature_requests": [
+    },
     {
-      "id": "AR-1",
-      "summary": "Remove the date from the Vastu Advance Course section",
-      "reqIds": [],
-      "status": "pending"
+      "id": "feature-in-the-services-page-frontend-src-pages-services-tsx-replace-the-placeholder-photo-boxes-in-the-vastu-advance-course-section-with-actual-uploaded-certificate-or-course-images-if-the-correct-image-files-cannot-be-determined-automatically-render-clearly-labeled-placeholder-img-tags-with-empty-src-attributes-and-alt-text-such-as-course-photo-1-and-course-photo-2-so-the-user-can-manually-supply-the-image-files",
+      "title": "In the Services page (frontend/src/pages/Services.tsx), replace the placeholder photo boxes in the Vastu Advance Course section with actual uploaded certificate or course images. If the correct image files cannot be determined automatically, render clearly labeled placeholder img tags with empty src attributes and alt text such as 'Course Photo 1' and 'Course Photo 2' so the user can manually supply the image files.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
     }
   ],
-  "projectName": "Remove date from Vastu Advance Course section",
+  "new_feature_requests": [],
+  "projectName": "Fix location link and allow photo replacement in Services page",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

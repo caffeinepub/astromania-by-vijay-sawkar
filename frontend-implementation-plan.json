@@ -1,21 +1,38 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Remove date from Vastu Advance Course section",
+  "title": "Fix location link and allow photo replacement in Services page",
   "requirements": [
     {
       "id": "REQ-1",
-      "summary": "Remove date or date-related text from the Vastu Advance Course entry in the Services page",
+      "summary": "Update the Google Maps location link in the Footer component to point to the correct office address",
       "acceptanceCriteria": [
-        "No date text is visible in the Vastu Advance Course section.",
-        "All other content in the Vastu Advance Course section remains unchanged.",
-        "No date is shown in any card, detail panel, or modal related to the Vastu Advance Course."
+        "The Google Maps link in the footer navigates to the correct business location",
+        "The link opens in a new tab",
+        "The displayed address text matches the actual location"
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/Footer.tsx",
+          "operation": "modify",
+          "description": "Update the Google Maps location link to point to Vijay Sawkar's correct office address. Ensure the link opens in a new tab with target='_blank' and rel='noopener noreferrer'. Update the displayed address text to match the actual business location. The link currently uses a placeholder Maps URL that needs to be replaced with the correct coordinates or address for the practice location."
+        }
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "summary": "Replace placeholder photo boxes with actual certificate images in the Vastu Advance Course section",
+      "acceptanceCriteria": [
+        "The Vastu Advance Course section in Services.tsx shows actual img elements instead of empty div placeholders",
+        "Each img element has a descriptive alt attribute",
+        "If images are not available, the img src attributes are clearly marked so the user can supply the correct file paths",
+        "The layout and styling of the image containers is preserved"
       ],
       "file_operations": [
         {
           "path": "frontend/src/pages/Services.tsx",
           "operation": "modify",
-          "description": "Locate the Vastu Advance Course service definition in the services array and remove any date-related fields (such as 'date', 'startDate', 'batchDate', 'upcomingDate', or similar properties) from its data object. Ensure all other fields (description, includes, modes, duration, price, etc.) remain intact. If the date appears in the service card rendering logic, remove that display element as well while preserving the card's layout and other content."
+          "description": "In the Vastu Advance Course section, replace the placeholder photo boxes (currently rendered as empty div elements) with actual img elements. Use the generated certificate images available at frontend/public/assets/generated/vastu-advance-cert-1.dim_1080x763.jpg and frontend/public/assets/generated/vastu-advance-cert-2.dim_1080x763.jpg. Each img element should have descriptive alt text like 'Vastu Advance Course Certificate 1' and 'Vastu Advance Course Certificate 2'. Preserve the existing layout structure and cosmic dark theme styling for the image containers. Ensure the images are properly sized and displayed within the course section."
         }
       ]
     }
