@@ -11,10 +11,10 @@ const services = [
 ];
 
 const stats = [
-  { icon: Users, value: '10,000+', label: 'Consultations' },
+  { icon: Users, value: '500,000+', label: 'Happy Clients' },
   { icon: Clock, value: '25+', label: 'Years Experience' },
   { icon: Award, value: '98%', label: 'Accuracy Rate' },
-  { icon: MapPin, value: 'Pune', label: 'Maharashtra, India' },
+  { icon: MapPin, value: 'Margao', label: 'Goa, India' },
 ];
 
 const testimonials = [
@@ -71,7 +71,7 @@ export default function Home() {
             </span>
           </h1>
           <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed">
-            Unlock the cosmic blueprint of your life. Expert guidance in Vedic Astrology, Vastu Shastra, and Gemstone Therapy from Pune's most trusted astrologer.
+            Unlock the cosmic blueprint of your life. Expert guidance in Vedic Astrology, Vastu Shastra, and Gemstone Therapy from Margao's most trusted astrologer.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link

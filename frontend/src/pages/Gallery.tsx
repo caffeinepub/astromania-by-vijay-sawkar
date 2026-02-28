@@ -1,19 +1,56 @@
 import { useState, useRef } from 'react';
-import { Upload, Trash2, Loader2, Image as ImageIcon, Video, X, Plus } from 'lucide-react';
+import { Image, Video, Upload, Trash2, Loader2, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { useInternetIdentity } from '../hooks/useInternetIdentity';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useActor } from '../hooks/useActor';
-import { useInternetIdentity } from '../hooks/useInternetIdentity';
 import { ExternalBlob } from '../backend';
+import { toast } from 'sonner';
+
+type FilterType = 'all' | 'photos' | 'videos';
+
+interface GalleryEntry {
+  id: string;
+  name: string;
+  url: string;
+  type: string;
+  isStatic?: boolean;
+}
+
+// Static pre-seeded gallery items (certificates & astrologer photo)
+const STATIC_ITEMS: GalleryEntry[] = [
+  {
+    id: 'static-astrologer-photo',
+    name: 'Vijay Sawkar – Vedic Astrologer',
+    url: '/assets/generated/about-astrologer.dim_800x600.png',
+    type: 'image',
+    isStatic: true,
+  },
+  {
+    id: 'static-astrology-certificate',
+    name: 'Astrology Advance Certificate',
+    url: '/assets/generated/astrology-advance-certificate.dim_1080x760.jpg',
+    type: 'image',
+    isStatic: true,
+  },
+  {
+    id: 'static-vastu-certificate',
+    name: 'Vastu Advance Certificate',
+    url: '/assets/generated/vastu-advance-certificate.dim_1080x760.jpg',
+    type: 'image',
+    isStatic: true,
+  },
+];
 
 function useIsAdmin() {
   const { actor, isFetching } = useActor();
-  return useQuery<boolean>({
-    queryKey: ['isCallerAdmin'],
+  const { identity } = useInternetIdentity();
+  return useQuery({
+    queryKey: ['isAdmin'],
     queryFn: async () => {
       if (!actor) return false;
       return actor.isCallerAdmin();
     },
-    enabled: !!actor && !isFetching,
+    enabled: !!actor && !isFetching && !!identity,
   });
 }
 
@@ -29,272 +66,267 @@ function useGalleryItems() {
   });
 }
 
-function useAddGalleryItem() {
-  const { actor } = useActor();
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: async ({ name, blob, type }: { name: string; blob: ExternalBlob; type: string }) => {
-      if (!actor) throw new Error('Actor not available');
-      return actor.addGalleryItem(name, blob, type);
-    },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['galleryItems'] }),
-  });
-}
-
-function useDeleteGalleryItem() {
-  const { actor } = useActor();
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: async (id: string) => {
-      if (!actor) throw new Error('Actor not available');
-      return actor.deleteGalleryItem(id);
-    },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['galleryItems'] }),
-  });
-}
-
-type MediaItem = {
-  id: string;
-  name: string;
-  url: string;
-  type: string;
-};
-
 export default function Gallery() {
   const { identity } = useInternetIdentity();
-  const isAuthenticated = !!identity;
+  const { actor } = useActor();
+  const queryClient = useQueryClient();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { data: isAdmin } = useIsAdmin();
-  const { data: galleryItems, isLoading } = useGalleryItems();
-  const addMutation = useAddGalleryItem();
-  const deleteMutation = useDeleteGalleryItem();
+  const { data: backendItems = [], isLoading: galleryLoading } = useGalleryItems();
 
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [filter, setFilter] = useState<FilterType>('all');
   const [uploadProgress, setUploadProgress] = useState<number | null>(null);
-  const [selectedMedia, setSelectedMedia] = useState<MediaItem | null>(null);
-  const [filter, setFilter] = useState<'all' | 'image' | 'video'>('all');
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
-  const mediaItems: MediaItem[] = (galleryItems ?? []).map(item => ({
+  // Combine static items with backend-uploaded items
+  const backendEntries: GalleryEntry[] = backendItems.map(item => ({
     id: item.id,
     name: item.name,
     url: item.blob.getDirectURL(),
     type: item.type,
+    isStatic: false,
   }));
 
-  const filtered = filter === 'all' ? mediaItems : mediaItems.filter(m => m.type === filter);
+  const allItems: GalleryEntry[] = [...STATIC_ITEMS, ...backendEntries];
 
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  const filteredItems = allItems.filter(item => {
+    if (filter === 'photos') return item.type === 'image';
+    if (filter === 'videos') return item.type === 'video';
+    return true;
+  });
 
-    const isVideo = file.type.startsWith('video/');
-    const type = isVideo ? 'video' : 'image';
-    const name = `${Date.now()}-${file.name}`;
-
-    try {
+  // Upload gallery item
+  const uploadMutation = useMutation({
+    mutationFn: async (file: File) => {
+      if (!actor) throw new Error('Not connected');
       const arrayBuffer = await file.arrayBuffer();
       const bytes = new Uint8Array(arrayBuffer);
       const blob = ExternalBlob.fromBytes(bytes).withUploadProgress((pct) => {
         setUploadProgress(pct);
       });
-      await addMutation.mutateAsync({ name, blob, type });
-    } catch (err) {
-      console.error('Upload error:', err);
-    } finally {
+      const type = file.type.startsWith('video/') ? 'video' : 'image';
+      await actor.addGalleryItem(file.name, blob, type);
+    },
+    onSuccess: () => {
       setUploadProgress(null);
-      if (fileInputRef.current) fileInputRef.current.value = '';
-    }
+      queryClient.invalidateQueries({ queryKey: ['galleryItems'] });
+      toast.success('Media uploaded successfully!');
+    },
+    onError: () => {
+      setUploadProgress(null);
+      toast.error('Failed to upload media.');
+    },
+  });
+
+  // Delete gallery item
+  const deleteMutation = useMutation({
+    mutationFn: async (id: string) => {
+      if (!actor) throw new Error('Not connected');
+      await actor.deleteGalleryItem(id);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['galleryItems'] });
+      toast.success('Item deleted.');
+    },
+    onError: () => {
+      toast.error('Failed to delete item.');
+    },
+  });
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) uploadMutation.mutate(file);
+    if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm('Delete this item from the gallery?')) return;
-    await deleteMutation.mutateAsync(id);
+  const openLightbox = (index: number) => setLightboxIndex(index);
+  const closeLightbox = () => setLightboxIndex(null);
+
+  const prevItem = () => {
+    if (lightboxIndex === null) return;
+    setLightboxIndex((lightboxIndex - 1 + filteredItems.length) % filteredItems.length);
   };
+
+  const nextItem = () => {
+    if (lightboxIndex === null) return;
+    setLightboxIndex((lightboxIndex + 1) % filteredItems.length);
+  };
+
+  const currentItem = lightboxIndex !== null ? filteredItems[lightboxIndex] : null;
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <main className="min-h-screen bg-background">
       {/* Hero */}
-      <section className="relative py-20 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-cosmic-navy via-background to-background" />
-        <div
-          className="absolute inset-0 opacity-20"
-          style={{
-            backgroundImage:
-              'radial-gradient(circle at 25% 50%, oklch(0.75 0.18 55) 0%, transparent 50%), radial-gradient(circle at 75% 30%, oklch(0.65 0.15 200) 0%, transparent 50%)',
-          }}
-        />
-        <div className="relative max-w-6xl mx-auto px-4 text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-cosmic-gold/30 bg-cosmic-gold/10 text-cosmic-gold text-sm font-medium mb-6">
-            <ImageIcon className="w-4 h-4" />
-            Photo & Video Gallery
-          </div>
-          <h1 className="text-4xl md:text-6xl font-display font-bold mb-4 bg-gradient-to-r from-cosmic-gold via-yellow-300 to-cosmic-gold bg-clip-text text-transparent">
-            Gallery
+      <section className="relative py-20 bg-gradient-to-br from-primary/10 via-background to-accent/10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h1 className="font-display text-4xl md:text-5xl font-bold text-foreground mb-4">
+            Our <span className="text-primary">Gallery</span>
           </h1>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Moments from consultations, events, and the cosmic journey of Vijay Sawkar's practice.
+            A visual journey through our consultations, certifications, and sacred spaces.
           </p>
         </div>
       </section>
 
-      {/* Controls */}
-      <section className="py-8 border-b border-cosmic-gold/10">
-        <div className="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <section className="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Toolbar */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
           {/* Filter Tabs */}
-          <div className="flex items-center gap-2 bg-cosmic-navy/40 border border-cosmic-gold/20 rounded-xl p-1">
-            {(['all', 'image', 'video'] as const).map(f => (
+          <div className="flex items-center gap-1 bg-muted rounded-lg p-1">
+            {(['all', 'photos', 'videos'] as FilterType[]).map(tab => (
               <button
-                key={f}
-                onClick={() => setFilter(f)}
-                className={`px-4 py-1.5 rounded-lg text-sm font-medium transition-colors capitalize ${
-                  filter === f
-                    ? 'bg-cosmic-gold text-cosmic-navy'
+                key={tab}
+                onClick={() => setFilter(tab)}
+                className={`px-4 py-1.5 rounded-md text-sm font-medium capitalize transition-colors ${
+                  filter === tab
+                    ? 'bg-background text-foreground shadow-sm'
                     : 'text-muted-foreground hover:text-foreground'
                 }`}
               >
-                {f === 'all' ? '🌟 All' : f === 'image' ? '🖼️ Photos' : '🎬 Videos'}
+                {tab}
               </button>
             ))}
           </div>
 
-          {/* Upload Button (admin only) */}
-          {isAuthenticated && isAdmin && (
+          {/* Admin Upload */}
+          {isAdmin && identity && (
             <div className="flex items-center gap-3">
               {uploadProgress !== null && (
-                <div className="flex items-center gap-2 text-sm text-cosmic-cyan">
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  Uploading {uploadProgress}%
-                </div>
+                <span className="text-sm text-muted-foreground">Uploading… {uploadProgress}%</span>
               )}
               <button
                 onClick={() => fileInputRef.current?.click()}
-                disabled={addMutation.isPending || uploadProgress !== null}
-                className="inline-flex items-center gap-2 px-5 py-2 bg-cosmic-gold text-cosmic-navy font-semibold rounded-xl hover:bg-yellow-400 transition-colors disabled:opacity-60"
+                disabled={uploadMutation.isPending}
+                className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors disabled:opacity-50"
               >
-                <Plus className="w-4 h-4" />
+                {uploadMutation.isPending ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Upload className="h-4 w-4" />
+                )}
                 Upload Media
               </button>
               <input
                 ref={fileInputRef}
                 type="file"
                 accept="image/*,video/*"
-                onChange={handleFileUpload}
                 className="hidden"
+                onChange={handleFileChange}
               />
             </div>
           )}
         </div>
-      </section>
 
-      {/* Gallery Grid */}
-      <section className="py-12">
-        <div className="max-w-6xl mx-auto px-4">
-          {isLoading ? (
-            <div className="flex items-center justify-center py-24">
-              <Loader2 className="w-8 h-8 animate-spin text-cosmic-gold" />
-            </div>
-          ) : filtered.length === 0 ? (
-            <div className="text-center py-24">
-              <div className="w-20 h-20 rounded-full bg-cosmic-navy/60 border border-cosmic-gold/20 flex items-center justify-center mx-auto mb-4">
-                <ImageIcon className="w-8 h-8 text-muted-foreground" />
-              </div>
-              <p className="text-muted-foreground text-lg mb-2">No media yet</p>
-              {isAuthenticated && isAdmin && (
-                <p className="text-sm text-muted-foreground">
-                  Click <strong className="text-cosmic-gold">Upload Media</strong> to add photos or videos.
-                </p>
-              )}
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {filtered.map(item => (
-                <div
-                  key={item.id}
-                  className="group relative bg-cosmic-navy/40 border border-cosmic-gold/10 rounded-xl overflow-hidden hover:border-cosmic-gold/40 transition-all duration-300 cursor-pointer"
-                  onClick={() => setSelectedMedia(item)}
-                >
-                  {item.type === 'video' ? (
-                    <div className="relative aspect-square bg-cosmic-navy/60 flex items-center justify-center">
-                      <video
-                        src={item.url}
-                        className="w-full h-full object-cover"
-                        muted
-                        preload="metadata"
-                      />
-                      <div className="absolute inset-0 flex items-center justify-center bg-black/30">
-                        <div className="w-12 h-12 rounded-full bg-cosmic-gold/90 flex items-center justify-center">
-                          <Video className="w-5 h-5 text-cosmic-navy ml-0.5" />
-                        </div>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="aspect-square overflow-hidden">
-                      <img
-                        src={item.url}
-                        alt={item.name}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
-                    </div>
-                  )}
-
-                  {/* Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity">
-                    <div className="absolute bottom-0 left-0 right-0 p-3">
-                      <p className="text-white text-xs truncate">{item.name}</p>
-                    </div>
+        {/* Gallery Grid */}
+        {galleryLoading ? (
+          <div className="flex items-center justify-center py-24">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          </div>
+        ) : filteredItems.length === 0 ? (
+          <div className="text-center py-24 text-muted-foreground">
+            <Image className="h-12 w-12 mx-auto mb-3 opacity-30" />
+            <p>No media found.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            {filteredItems.map((item, index) => (
+              <div
+                key={item.id}
+                className="relative group rounded-xl overflow-hidden bg-muted cursor-pointer"
+                onClick={() => openLightbox(index)}
+              >
+                {item.type === 'video' ? (
+                  <video
+                    src={item.url}
+                    className="w-full h-full object-contain"
+                    muted
+                    playsInline
+                  />
+                ) : (
+                  <img
+                    src={item.url}
+                    alt={item.name}
+                    className="w-full h-auto object-contain"
+                  />
+                )}
+                {/* Subtle hover overlay — no text overlays on images */}
+                <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity" />
+                {item.type === 'video' && (
+                  <div className="absolute top-2 left-2 bg-black/60 rounded-full p-1">
+                    <Video className="h-3.5 w-3.5 text-white" />
                   </div>
-
-                  {/* Delete button (admin only) */}
-                  {isAuthenticated && isAdmin && (
-                    <button
-                      onClick={(e) => { e.stopPropagation(); handleDelete(item.id); }}
-                      disabled={deleteMutation.isPending}
-                      className="absolute top-2 right-2 w-8 h-8 rounded-full bg-red-500/80 hover:bg-red-500 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity disabled:opacity-50"
-                    >
-                      <Trash2 className="w-3.5 h-3.5 text-white" />
-                    </button>
-                  )}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+                )}
+                {/* Only show delete button for non-static (backend-uploaded) items */}
+                {isAdmin && identity && !item.isStatic && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      deleteMutation.mutate(item.id);
+                    }}
+                    disabled={deleteMutation.isPending}
+                    className="absolute top-2 right-2 p-1.5 bg-red-600 rounded-full text-white hover:bg-red-700 transition-colors opacity-0 group-hover:opacity-100"
+                  >
+                    <Trash2 className="h-3.5 w-3.5" />
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
       </section>
 
-      {/* Lightbox Modal */}
-      {selectedMedia && (
+      {/* Lightbox — shows image exactly as-is, no date/year overlays */}
+      {currentItem && (
         <div
-          className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4"
-          onClick={() => setSelectedMedia(null)}
+          className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4"
+          onClick={closeLightbox}
         >
           <button
-            className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center transition-colors"
-            onClick={() => setSelectedMedia(null)}
+            className="absolute top-4 right-4 text-white/80 hover:text-white p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+            onClick={closeLightbox}
           >
-            <X className="w-5 h-5 text-white" />
+            <X className="h-6 w-6" />
           </button>
+
+          {filteredItems.length > 1 && (
+            <>
+              <button
+                className="absolute left-4 top-1/2 -translate-y-1/2 text-white/80 hover:text-white p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+                onClick={(e) => { e.stopPropagation(); prevItem(); }}
+              >
+                <ChevronLeft className="h-6 w-6" />
+              </button>
+              <button
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-white/80 hover:text-white p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+                onClick={(e) => { e.stopPropagation(); nextItem(); }}
+              >
+                <ChevronRight className="h-6 w-6" />
+              </button>
+            </>
+          )}
+
           <div
-            className="max-w-4xl max-h-[85vh] w-full"
-            onClick={e => e.stopPropagation()}
+            className="max-w-5xl max-h-[90vh] w-full flex flex-col items-center"
+            onClick={(e) => e.stopPropagation()}
           >
-            {selectedMedia.type === 'video' ? (
+            {currentItem.type === 'video' ? (
               <video
-                src={selectedMedia.url}
+                src={currentItem.url}
                 controls
                 autoPlay
-                className="w-full max-h-[85vh] rounded-xl"
+                className="max-h-[88vh] max-w-full rounded-lg"
               />
             ) : (
               <img
-                src={selectedMedia.url}
-                alt={selectedMedia.name}
-                className="w-full max-h-[85vh] object-contain rounded-xl"
+                src={currentItem.url}
+                alt={currentItem.name}
+                className="max-h-[88vh] max-w-full object-contain rounded-lg"
               />
             )}
-            <p className="text-white/60 text-sm text-center mt-3">{selectedMedia.name}</p>
           </div>
         </div>
       )}
-    </div>
+    </main>
   );
 }

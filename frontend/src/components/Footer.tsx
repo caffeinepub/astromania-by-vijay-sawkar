@@ -22,6 +22,8 @@ const quickLinks = [
   { label: 'Contact', path: '/contact' },
 ];
 
+const MAPS_URL = 'https://maps.app.goo.gl/i32yhyBr9B47Sg9T7?g_st=aw';
+
 export default function Footer() {
   const year = new Date().getFullYear();
   const appId = encodeURIComponent(typeof window !== 'undefined' ? window.location.hostname : 'astro-vastu-knowledge');
@@ -95,7 +97,7 @@ export default function Footer() {
           <ul className="space-y-3">
             <li className="flex items-start gap-3 text-sm text-muted-foreground">
               <Phone className="w-4 h-4 shrink-0 mt-0.5 text-cosmic-gold" />
-              <span>+91 98765 43210</span>
+              <span>+91 98504 54549</span>
             </li>
             <li className="flex items-start gap-3 text-sm text-muted-foreground">
               <Mail className="w-4 h-4 shrink-0 mt-0.5 text-cosmic-gold" />
@@ -103,7 +105,14 @@ export default function Footer() {
             </li>
             <li className="flex items-start gap-3 text-sm text-muted-foreground">
               <MapPin className="w-4 h-4 shrink-0 mt-0.5 text-cosmic-gold" />
-              <span>Pune, Maharashtra, India</span>
+              <a
+                href={MAPS_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-cosmic-gold transition-colors underline underline-offset-2"
+              >
+                Margao, Goa, India
+              </a>
             </li>
           </ul>
           <div className="mt-5">

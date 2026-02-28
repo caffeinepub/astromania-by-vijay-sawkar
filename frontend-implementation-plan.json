@@ -1,97 +1,21 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Fix About page bio, remove Numerology, add New Kundali service, add photo/video gallery area",
+  "title": "Remove date from Vastu Advance Course section",
   "requirements": [
     {
       "id": "REQ-1",
-      "summary": "Add a dedicated 'About Vijay Sawkar' bio section on the About page that includes his personal background, years of experience, notable achievements, and certifications/qualifications in Vedic Astrology, Vastu, and Gemstone Therapy",
+      "summary": "Remove date or date-related text from the Vastu Advance Course entry in the Services page",
       "acceptanceCriteria": [
-        "About page displays a clearly labeled section with Vijay Sawkar's biography",
-        "Section includes experience details, certifications, and qualifications",
-        "Section is visually distinct and styled consistently with the cosmic dark theme"
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/pages/About.tsx",
-          "operation": "modify",
-          "description": "Add a prominent biography section above or near the existing credentials section. Include Vijay Sawkar's personal background, years of experience (over 15 years), notable achievements, and detailed certifications in Vedic Astrology, Vastu Shastra, and Gemstone Therapy. Style the section with cosmic dark theme elements (gradient borders, glow effects) to match the existing page design. Position it prominently so users immediately see it when visiting the About page."
-        }
-      ]
-    },
-    {
-      "id": "REQ-2",
-      "summary": "Remove 'Numerology' from the Available Services section on the Services page and ensure no Numerology entry appears in any related UI components",
-      "acceptanceCriteria": [
-        "Numerology does not appear in the Services page service list",
-        "Numerology does not appear in the Footer services list",
-        "Numerology does not appear in the Home page service highlights",
-        "No other references to Numerology remain in user-facing UI"
+        "No date text is visible in the Vastu Advance Course section.",
+        "All other content in the Vastu Advance Course section remains unchanged.",
+        "No date is shown in any card, detail panel, or modal related to the Vastu Advance Course."
       ],
       "file_operations": [
         {
           "path": "frontend/src/pages/Services.tsx",
           "operation": "modify",
-          "description": "Remove the 'Numerology' service entry from the services array or service cards. Ensure the remaining five services (Vedic Astrology, Vastu Shastra, Gemstone Therapy, Muhurta, Kundali Matching) are displayed correctly with no gaps in the layout."
-        },
-        {
-          "path": "frontend/src/components/Footer.tsx",
-          "operation": "modify",
-          "description": "Remove 'Numerology' from the services list in the footer. Verify that the services list only includes Vedic Astrology, Vastu Shastra, Gemstone Therapy, Muhurta, and Kundali Matching."
-        },
-        {
-          "path": "frontend/src/pages/Home.tsx",
-          "operation": "modify",
-          "description": "Remove any 'Numerology' references from the service highlights section if present. Ensure the home page only displays the five core services without Numerology."
-        }
-      ]
-    },
-    {
-      "id": "REQ-3",
-      "summary": "Add 'New Kundali' (Kundali preparation/creation) as a distinct service entry in the Services page and include it in booking consultation type options",
-      "acceptanceCriteria": [
-        "Services page includes a 'New Kundali' service card with title and description",
-        "Service card lists available consultation modes",
-        "BookConsultation page consultation type dropdown/select includes 'New Kundali' as an option"
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/pages/Services.tsx",
-          "operation": "modify",
-          "description": "Add a 'New Kundali' service card to the services array. Include a title ('New Kundali' or 'Kundali Preparation'), a description explaining what the service covers (preparation of birth charts, planetary positions, astrological analysis), and list available consultation modes (Online/Offline). Style the card consistently with the existing cosmic dark theme and service card layout."
-        },
-        {
-          "path": "frontend/src/pages/BookConsultation.tsx",
-          "operation": "modify",
-          "description": "Add 'New Kundali' as an option in the consultation type dropdown/select field. Ensure it appears alongside existing consultation types and is selectable when users book a consultation."
-        }
-      ]
-    },
-    {
-      "id": "REQ-4",
-      "summary": "Add a dedicated photo and video gallery section to the website where admin users can upload photos and videos and all visitors can view them, reusing the existing backend blob storage pattern from Contact.tsx",
-      "acceptanceCriteria": [
-        "A photo and video gallery section/page is accessible from the site",
-        "All visitors can view uploaded photos and videos",
-        "Authenticated admin users can upload new photos and videos",
-        "Authenticated admin users can delete existing photos and videos",
-        "Gallery is styled consistently with the cosmic dark theme"
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/pages/Gallery.tsx",
-          "operation": "create",
-          "description": "Create a dedicated Gallery page component that displays photos and videos. Use the backend's getGalleryItems query hook to fetch media. Display media in a responsive grid layout with cosmic dark theme styling. For images, render using the ExternalBlob getDirectURL() method in img tags. For videos, render using video tags with the direct URL and controls. Include conditional rendering for admin users: show upload and delete controls when the user is authenticated and has admin role (use isCallerAdmin query). For uploads, create a file input that accepts images and videos, then use the addGalleryItem mutation with ExternalBlob.fromBytes() and withUploadProgress() to track upload progress. For deletes, add delete buttons on each media item that call the deleteGalleryItem mutation. Handle loading states, errors, and empty gallery states. Use the authorization component's guidance to verify admin role before showing admin controls. Verify the blob-storage component's usage instructions before implementing."
-        },
-        {
-          "path": "frontend/src/App.tsx",
-          "operation": "modify",
-          "description": "Add a route for the Gallery page ('/gallery') in the router configuration. Import the Gallery component and wire it into the Route array alongside existing routes (Home, About, Services, etc.)."
-        },
-        {
-          "path": "frontend/src/components/Header.tsx",
-          "operation": "modify",
-          "description": "Add a 'Gallery' navigation link in the Header component. Place it in the navigation menu between existing links (e.g., after 'Testimonials' or 'Contact'). Ensure it appears in both desktop and mobile navigation menus and links to '/gallery'."
+          "description": "Locate the Vastu Advance Course service definition in the services array and remove any date-related fields (such as 'date', 'startDate', 'batchDate', 'upcomingDate', or similar properties) from its data object. Ensure all other fields (description, includes, modes, duration, price, etc.) remain intact. If the date appears in the service card rendering logic, remove that display element as well while preserving the card's layout and other content."
         }
       ]
     }

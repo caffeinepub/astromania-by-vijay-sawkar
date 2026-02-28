@@ -7,6 +7,8 @@ import { useActor } from '../hooks/useActor';
 import { ExternalBlob } from '../backend';
 import { toast } from 'sonner';
 
+const MAPS_URL = 'https://maps.app.goo.gl/i32yhyBr9B47Sg9T7?g_st=aw';
+
 function useIsAdmin() {
   const { actor, isFetching } = useActor();
   const { identity } = useInternetIdentity();
@@ -182,7 +184,14 @@ export default function Contact() {
               <MapPin className="h-6 w-6 text-primary" />
             </div>
             <h3 className="font-semibold text-foreground mb-1">Location</h3>
-            <p className="text-sm text-muted-foreground">Margao, Goa, India</p>
+            <a
+              href={MAPS_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-muted-foreground hover:text-primary transition-colors underline underline-offset-2"
+            >
+              Margao, Goa, India
+            </a>
           </div>
         </div>
 
@@ -289,58 +298,46 @@ export default function Contact() {
 
           {/* Map */}
           <div className="bg-card border border-border rounded-2xl overflow-hidden">
-            <div className="p-6 border-b border-border">
-              <h2 className="font-display text-2xl font-bold text-foreground">Find Us</h2>
-              <p className="text-muted-foreground text-sm mt-1">Margao, Goa, India</p>
-            </div>
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3843.5!2d74.0!3d15.27!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bbfb5a0b0b0b0b0%3A0x0!2sMargao%2C+Goa!5e0!3m2!1sen!2sin!4v1234567890"
+              title="Office Location"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3843.0!2d74.0!3d15.27!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTXCsDE2JzEyLjAiTiA3NMKwMDAnMDAuMCJF!5e0!3m2!1sen!2sin!4v1234567890"
               width="100%"
-              height="300"
-              style={{ border: 0 }}
+              height="100%"
+              style={{ minHeight: '400px', border: 0 }}
               allowFullScreen
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
-              title="Margao, Goa Location"
             />
           </div>
         </div>
 
-        {/* Media Gallery */}
-        <div className="mb-16">
+        {/* Media Gallery Section */}
+        <div>
           <div className="flex items-center justify-between mb-6">
-            <div>
-              <h2 className="font-display text-3xl font-bold text-foreground">
-                Media <span className="text-primary">Gallery</span>
-              </h2>
-              <p className="text-muted-foreground text-sm mt-1">Photos and videos from our consultations and events</p>
-            </div>
-            {/* Admin Upload Button */}
-            {isAdmin && (
+            <h2 className="font-display text-2xl font-bold text-foreground">Media Gallery</h2>
+            {isAdmin && identity && (
               <div className="flex items-center gap-3">
                 {uploadProgress !== null && (
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                    <Loader2 className="h-4 w-4 animate-spin text-primary" />
-                    <span>{uploadProgress}%</span>
-                  </div>
+                  <span className="text-sm text-muted-foreground">Uploading… {uploadProgress}%</span>
                 )}
                 <button
                   onClick={() => fileInputRef.current?.click()}
                   disabled={uploadMutation.isPending}
-                  className="flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors disabled:opacity-50"
+                  className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors disabled:opacity-50"
                 >
                   {uploadMutation.isPending ? (
-                    <><Loader2 className="h-4 w-4 animate-spin" /> Uploading...</>
+                    <Loader2 className="h-4 w-4 animate-spin" />
                   ) : (
-                    <><Upload className="h-4 w-4" /> Upload Media</>
+                    <Upload className="h-4 w-4" />
                   )}
+                  Upload Media
                 </button>
                 <input
                   ref={fileInputRef}
                   type="file"
                   accept="image/*,video/*"
-                  onChange={handleFileChange}
                   className="hidden"
+                  onChange={handleFileChange}
                 />
               </div>
             )}
@@ -351,69 +348,43 @@ export default function Contact() {
               <Loader2 className="h-8 w-8 animate-spin text-primary" />
             </div>
           ) : galleryItems.length === 0 ? (
-            <div className="text-center py-16 bg-card border border-border rounded-2xl">
-              <Image className="h-12 w-12 text-muted-foreground/30 mx-auto mb-3" />
-              <p className="text-muted-foreground text-sm">
-                {isAdmin ? 'No media yet. Upload photos or videos to get started.' : 'No media available yet.'}
-              </p>
+            <div className="text-center py-16 text-muted-foreground">
+              <Image className="h-12 w-12 mx-auto mb-3 opacity-30" />
+              <p>No media uploaded yet.</p>
             </div>
           ) : (
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
               {galleryItems.map((item) => (
-                <div
-                  key={item.id}
-                  className="relative group bg-card border border-border rounded-xl overflow-hidden aspect-square"
-                >
+                <div key={item.id} className="relative group rounded-xl overflow-hidden aspect-square bg-muted">
                   {item.type === 'video' ? (
                     <video
                       src={item.blob.getDirectURL()}
                       className="w-full h-full object-cover"
-                      controls={false}
                       muted
-                      loop
-                      onMouseEnter={(e) => (e.currentTarget as HTMLVideoElement).play()}
-                      onMouseLeave={(e) => {
-                        const v = e.currentTarget as HTMLVideoElement;
-                        v.pause();
-                        v.currentTime = 0;
-                      }}
+                      playsInline
                     />
                   ) : (
                     <img
                       src={item.blob.getDirectURL()}
                       alt={item.name}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      className="w-full h-full object-cover"
                     />
                   )}
-
-                  {/* Type badge */}
-                  <div className="absolute top-2 left-2">
+                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
                     {item.type === 'video' ? (
-                      <span className="flex items-center gap-1 bg-black/60 text-white text-xs px-2 py-0.5 rounded-full">
-                        <Video className="h-3 w-3" /> Video
-                      </span>
+                      <Video className="h-6 w-6 text-white" />
                     ) : (
-                      <span className="flex items-center gap-1 bg-black/60 text-white text-xs px-2 py-0.5 rounded-full">
-                        <Image className="h-3 w-3" /> Photo
-                      </span>
+                      <Image className="h-6 w-6 text-white" />
                     )}
-                  </div>
-
-                  {/* Admin delete button */}
-                  {isAdmin && (
-                    <button
-                      onClick={() => deleteMutation.mutate(item.id)}
-                      disabled={deleteMutation.isPending}
-                      className="absolute top-2 right-2 bg-red-500/80 hover:bg-red-600 text-white p-1.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity disabled:opacity-50"
-                      title="Delete"
-                    >
-                      <Trash2 className="h-3 w-3" />
-                    </button>
-                  )}
-
-                  {/* Name overlay */}
-                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <p className="text-white text-xs truncate">{item.name}</p>
+                    {isAdmin && identity && (
+                      <button
+                        onClick={() => deleteMutation.mutate(item.id)}
+                        disabled={deleteMutation.isPending}
+                        className="absolute top-2 right-2 p-1.5 bg-red-600 rounded-full text-white hover:bg-red-700 transition-colors"
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </button>
+                    )}
                   </div>
                 </div>
               ))}

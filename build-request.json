@@ -1,94 +1,35 @@
 {
   "kind": "build_request",
-  "title": "Fix About page bio, remove Numerology, add New Kundali service, add photo/video gallery area",
-  "projectName": "Astromania by Vijay Sawkar",
+  "title": "Remove date from Vastu Advance Course section",
   "priority": "high",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Add a dedicated 'About Vijay Sawkar' bio section on the About page that includes his personal background, years of experience, notable achievements, and certifications/qualifications in Vedic Astrology, Vastu, and Gemstone Therapy. This section must be visible and prominent when users visit the About page.",
+      "text": "In the Services page (or wherever the Vastu Advance Course is displayed), remove any date or date-related text (e.g., course start date, batch date, upcoming date) from the Vastu Advance Course entry.",
       "target": "frontend",
       "source": {
         "messageIds": [
-          "msg-1"
+          "msg-latest"
         ],
         "quotes": [
-          "U didn't add the about vijay sawkar thing"
+          "In the vastu advance course remove the date!!!!"
         ]
       },
       "acceptanceCriteria": [
-        "About page displays a clearly labeled section with Vijay Sawkar's biography",
-        "Section includes experience details, certifications, and qualifications",
-        "Section is visually distinct and styled consistently with the cosmic dark theme"
-      ]
-    },
-    {
-      "id": "REQ-2",
-      "text": "Remove 'Numerology' from the Available Services section on the Services page. Ensure no Numerology entry appears in the services list or any related UI components (e.g., Footer services list, Home page service highlights).",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-1"
-        ],
-        "quotes": [
-          "if u go in available services , there's still numerology present there"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Numerology does not appear in the Services page service list",
-        "Numerology does not appear in the Footer services list",
-        "Numerology does not appear in the Home page service highlights",
-        "No other references to Numerology remain in user-facing UI"
-      ]
-    },
-    {
-      "id": "REQ-3",
-      "text": "Add 'New Kundali' (Kundali preparation/creation) as a distinct service entry in the Services page. Include a description explaining what the service covers and list available consultation modes (online/offline). Also add it to the booking consultation type options if applicable.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-1"
-        ],
-        "quotes": [
-          "in service also add issue of new kundali"
-        ]
-      },
-      "acceptanceCriteria": [
-        "Services page includes a 'New Kundali' service card with title and description",
-        "Service card lists available consultation modes",
-        "BookConsultation page consultation type dropdown/select includes 'New Kundali' as an option"
-      ]
-    },
-    {
-      "id": "REQ-4",
-      "text": "Add a dedicated photo and video gallery section to the website. Admin users (authenticated via Internet Identity) should be able to upload photos and videos; all visitors should be able to view them. This gallery area should be accessible from the main navigation or a dedicated page, and support displaying both images and video media. Reuse the existing backend blob storage and the media gallery pattern already present in Contact.tsx if applicable.",
-      "target": "both",
-      "source": {
-        "messageIds": [
-          "msg-1"
-        ],
-        "quotes": [
-          "u didn't even keep area for photo and video"
-        ]
-      },
-      "acceptanceCriteria": [
-        "A photo and video gallery section/page is accessible from the site",
-        "All visitors can view uploaded photos and videos",
-        "Authenticated admin users can upload new photos and videos",
-        "Authenticated admin users can delete existing photos and videos",
-        "Gallery is styled consistently with the cosmic dark theme"
+        "No date text is visible in the Vastu Advance Course section.",
+        "All other content in the Vastu Advance Course section remains unchanged.",
+        "No date is shown in any card, detail panel, or modal related to the Vastu Advance Course."
       ]
     }
   ],
   "constraints": [
-    "Do not modify files listed in frontend.immutablePaths",
-    "Maintain the existing cosmic dark theme across all changes",
-    "Do not introduce new backend canisters or external services"
+    "Do not remove or alter any other fields or content in the Vastu Advance Course section besides the date.",
+    "Do not modify any immutable frontend paths."
   ],
   "nonGoals": [
-    "Redesigning the overall site layout or navigation structure",
-    "Adding payment or e-commerce features",
-    "Integrating third-party video hosting platforms"
+    "Removing dates from other courses or sections.",
+    "Any backend changes.",
+    "Redesigning the Services or course layout."
   ],
   "imageRequirements": {
     "required": [],

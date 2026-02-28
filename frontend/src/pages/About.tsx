@@ -1,4 +1,4 @@
-import { Star, Award, BookOpen, Users, Clock, MapPin, Phone, ChevronRight } from 'lucide-react';
+import { Star, Phone, ChevronRight } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
 
 const credentials = [
@@ -15,17 +15,6 @@ const stats = [
   { value: '10,000+', label: 'Consultations' },
   { value: '5,000+', label: 'Happy Clients' },
   { value: '98%', label: 'Accuracy Rate' },
-];
-
-const timeline = [
-  { year: '1999', event: 'Began formal study of Vedic Astrology under Guru Pt. Ramesh Shastri in Pune' },
-  { year: '2002', event: 'Received Jyotish Visharad certification from Bharatiya Vidya Bhavan' },
-  { year: '2005', event: 'Completed advanced Vastu Shastra training and started consulting practice' },
-  { year: '2008', event: 'Certified in Gemstone Therapy; expanded practice to include crystal healing' },
-  { year: '2012', event: 'Recognized by Indian Council of Astrological Sciences for outstanding contributions' },
-  { year: '2015', event: 'Opened dedicated consultation center in Pune; served clients across Maharashtra' },
-  { year: '2018', event: 'Launched online consultation services; reached clients across India and abroad' },
-  { year: '2024', event: 'Celebrated 25 years of practice with over 10,000 successful consultations' },
 ];
 
 const expertiseAreas = [
@@ -168,50 +157,8 @@ export default function About() {
         </div>
       </section>
 
-      {/* Timeline */}
-      <section className="py-16 bg-cosmic-navy/20">
-        <div className="max-w-4xl mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-display font-bold text-cosmic-gold mb-3">25 Years of Journey</h2>
-            <p className="text-muted-foreground">A timeline of dedication, learning, and service</p>
-          </div>
-          <div className="relative">
-            <div className="absolute left-6 md:left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-cosmic-gold via-cosmic-cyan to-cosmic-gold opacity-30" />
-            <div className="space-y-8">
-              {timeline.map((item, i) => (
-                <div key={i} className={`relative flex items-start gap-6 ${i % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
-                  <div className="flex-1 md:text-right hidden md:block">
-                    {i % 2 === 0 && (
-                      <div className="bg-cosmic-navy/60 border border-cosmic-gold/20 rounded-xl p-4 inline-block text-left">
-                        <p className="text-cosmic-gold font-bold text-lg">{item.year}</p>
-                        <p className="text-foreground/80 text-sm mt-1">{item.event}</p>
-                      </div>
-                    )}
-                  </div>
-                  <div className="relative z-10 w-12 h-12 shrink-0 rounded-full bg-cosmic-navy border-2 border-cosmic-gold flex items-center justify-center">
-                    <div className="w-3 h-3 rounded-full bg-cosmic-gold" />
-                  </div>
-                  <div className="flex-1">
-                    <div className="bg-cosmic-navy/60 border border-cosmic-gold/20 rounded-xl p-4 md:hidden">
-                      <p className="text-cosmic-gold font-bold text-lg">{item.year}</p>
-                      <p className="text-foreground/80 text-sm mt-1">{item.event}</p>
-                    </div>
-                    {i % 2 !== 0 && (
-                      <div className="bg-cosmic-navy/60 border border-cosmic-gold/20 rounded-xl p-4 hidden md:block">
-                        <p className="text-cosmic-gold font-bold text-lg">{item.year}</p>
-                        <p className="text-foreground/80 text-sm mt-1">{item.event}</p>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Expertise Areas */}
-      <section className="py-16">
+      <section className="py-16 bg-cosmic-navy/20">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-display font-bold text-cosmic-gold mb-3">Areas of Expertise</h2>

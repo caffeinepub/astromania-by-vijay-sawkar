@@ -14,7 +14,7 @@ const consultationTypes = [
 const consultationModes = [
   { value: 'online-video', label: '📹 Online Video Call' },
   { value: 'online-phone', label: '📞 Online Phone Call' },
-  { value: 'offline', label: '🏛️ In-Person (Pune Office)' },
+  { value: 'offline', label: '🏛️ In-Person (Margao Office)' },
 ];
 
 export default function BookConsultation() {
@@ -224,11 +224,11 @@ export default function BookConsultation() {
             <div className="bg-cosmic-navy/40 border border-cosmic-gold/20 rounded-2xl p-6">
               <h3 className="font-semibold text-cosmic-gold mb-4">Quick Contact</h3>
               <div className="space-y-3">
-                <a href="tel:+919876543210" className="flex items-center gap-3 text-foreground/80 hover:text-cosmic-gold transition-colors">
+                <a href="tel:+919850454549" className="flex items-center gap-3 text-foreground/80 hover:text-cosmic-gold transition-colors">
                   <Phone className="w-5 h-5 shrink-0 text-cosmic-gold" />
-                  <span className="text-sm">+91 98765 43210</span>
+                  <span className="text-sm">+91 98504 54549</span>
                 </a>
-                <a href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-foreground/80 hover:text-green-400 transition-colors">
+                <a href="https://wa.me/919850454549" target="_blank" rel="noopener noreferrer" className="flex items-center gap-3 text-foreground/80 hover:text-green-400 transition-colors">
                   <MessageCircle className="w-5 h-5 shrink-0 text-green-400" />
                   <span className="text-sm">WhatsApp Us</span>
                 </a>

@@ -1,43 +1,16 @@
 {
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
-  "summary": "Project for Vijay Sawkar's astrology/services website. Needs: About Vijay Sawkar bio section, removal of Numerology from Available Services, addition of New Kundali service, and a photo/video area.",
+  "summary": "New project",
   "architectural_notes": [],
-  "known_issues": [
-    "Numerology still appearing in Available Services section despite removal attempt",
-    "About Vijay Sawkar bio/experience/certifications section missing"
-  ],
-  "isFixRequest": true,
+  "known_issues": [],
+  "isFixRequest": false,
   "existing_features": [
     {
-      "id": "feature-add-a-dedicated-about-vijay-sawkar-bio-section-on-the-about-page-that-includes-his-personal-background-years-of-experience-notable-achievements-and-certifications-qualifications-in-vedic-astrology-vastu-and-gemstone-therapy-this-section-must-be-visible-and-prominent-when-users-visit-the-about-page",
-      "title": "Add a dedicated 'About Vijay Sawkar' bio section on the About page that includes his personal background, years of experience, notable achievements, and certifications/qualifications in Vedic Astrology, Vastu, and Gemstone Therapy. This section must be visible and prominent when users visit the About page.",
+      "id": "feature-in-the-services-page-or-wherever-the-vastu-advance-course-is-displayed-remove-any-date-or-date-related-text-e-g-course-start-date-batch-date-upcoming-date-from-the-vastu-advance-course-entry",
+      "title": "In the Services page (or wherever the Vastu Advance Course is displayed), remove any date or date-related text (e.g., course start date, batch date, upcoming date) from the Vastu Advance Course entry.",
       "reqIds": [
         "REQ-1"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-remove-numerology-from-the-available-services-section-on-the-services-page-ensure-no-numerology-entry-appears-in-the-services-list-or-any-related-ui-components-e-g-footer-services-list-home-page-service-highlights",
-      "title": "Remove 'Numerology' from the Available Services section on the Services page. Ensure no Numerology entry appears in the services list or any related UI components (e.g., Footer services list, Home page service highlights).",
-      "reqIds": [
-        "REQ-2"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-add-new-kundali-kundali-preparation-creation-as-a-distinct-service-entry-in-the-services-page-include-a-description-explaining-what-the-service-covers-and-list-available-consultation-modes-online-offline-also-add-it-to-the-booking-consultation-type-options-if-applicable",
-      "title": "Add 'New Kundali' (Kundali preparation/creation) as a distinct service entry in the Services page. Include a description explaining what the service covers and list available consultation modes (online/offline). Also add it to the booking consultation type options if applicable.",
-      "reqIds": [
-        "REQ-3"
-      ],
-      "version": 1
-    },
-    {
-      "id": "feature-add-a-dedicated-photo-and-video-gallery-section-to-the-website-admin-users-authenticated-via-internet-identity-should-be-able-to-upload-photos-and-videos-all-visitors-should-be-able-to-view-them-this-gallery-area-should-be-accessible-from-the-main-navigation-or-a-dedicated-page-and-support-displaying-both-images-and-video-media-reuse-the-existing-backend-blob-storage-and-the-media-gallery-pattern-already-present-in-contact-tsx-if-applicable",
-      "title": "Add a dedicated photo and video gallery section to the website. Admin users (authenticated via Internet Identity) should be able to upload photos and videos; all visitors should be able to view them. This gallery area should be accessible from the main navigation or a dedicated page, and support displaying both images and video media. Reuse the existing backend blob storage and the media gallery pattern already present in Contact.tsx if applicable.",
-      "reqIds": [
-        "REQ-4"
       ],
       "version": 1
     }
@@ -45,31 +18,12 @@
   "new_feature_requests": [
     {
       "id": "AR-1",
-      "summary": "Add About Vijay Sawkar section with bio, experience, and certifications",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-2",
-      "summary": "Remove Numerology from Available Services section",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-3",
-      "summary": "Add New Kundali as a service in the Services section",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-4",
-      "summary": "Add a dedicated area for photos and videos",
+      "summary": "Remove the date from the Vastu Advance Course section",
       "reqIds": [],
       "status": "pending"
     }
   ],
-  "gameProjectType": "none",
-  "projectName": "Vijay Sawkar Astrology Website",
+  "projectName": "Remove date from Vastu Advance Course section",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }
