@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { Phone, Mail, MapPin, MessageCircle, Send, Upload, Trash2, Image, Loader2, Video } from 'lucide-react';
+import { Phone, Mail, MapPin, MessageCircle, Send, Upload, Trash2, Image, Loader2, Video, Building2 } from 'lucide-react';
 import { SiInstagram, SiFacebook } from 'react-icons/si';
 import { useInternetIdentity } from '../hooks/useInternetIdentity';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -178,12 +178,15 @@ export default function Contact() {
             </a>
           </div>
 
-          {/* Location */}
+          {/* Office Address */}
           <div className="bg-card border border-border rounded-2xl p-6 text-center hover:shadow-md transition-shadow">
             <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-3">
               <MapPin className="h-6 w-6 text-primary" />
             </div>
-            <h3 className="font-semibold text-foreground mb-1">Location</h3>
+            <div className="flex items-center justify-center gap-1.5 mb-1">
+              <Building2 className="h-3.5 w-3.5 text-primary/70" />
+              <h3 className="font-semibold text-foreground">Office Address</h3>
+            </div>
             <a
               href={MAPS_URL}
               target="_blank"
@@ -217,9 +220,8 @@ export default function Contact() {
           </a>
         </div>
 
-        {/* Main Grid: Form + Map */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-16">
-          {/* Contact Form */}
+        {/* Contact Form — full width */}
+        <div className="max-w-2xl mx-auto mb-16">
           <div className="bg-card border border-border rounded-2xl p-8">
             <h2 className="font-display text-2xl font-bold text-foreground mb-6">Send a Message</h2>
             {formSuccess ? (
@@ -294,20 +296,6 @@ export default function Contact() {
                 </button>
               </form>
             )}
-          </div>
-
-          {/* Map */}
-          <div className="bg-card border border-border rounded-2xl overflow-hidden">
-            <iframe
-              title="Office Location"
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3843.0!2d74.0!3d15.27!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTXCsDE2JzEyLjAiTiA3NMKwMDAnMDAuMCJF!5e0!3m2!1sen!2sin!4v1234567890"
-              width="100%"
-              height="100%"
-              style={{ minHeight: '400px', border: 0 }}
-              allowFullScreen
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            />
           </div>
         </div>
 

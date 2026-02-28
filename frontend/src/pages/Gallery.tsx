@@ -1,23 +1,25 @@
 import { useState, useRef } from 'react';
-import { Image, Video, Upload, Trash2, Loader2, X, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Image, Video, Upload, Trash2, Loader2, X, ChevronLeft, ChevronRight, Award } from 'lucide-react';
 import { useInternetIdentity } from '../hooks/useInternetIdentity';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useActor } from '../hooks/useActor';
 import { ExternalBlob } from '../backend';
 import { toast } from 'sonner';
+import CertificateCard from '../components/CertificateCard';
 
-type FilterType = 'all' | 'photos' | 'videos';
+type FilterType = 'all' | 'photos' | 'videos' | 'certificates';
 
 interface GalleryEntry {
   id: string;
   name: string;
   url: string;
-  type: string;
+  type: string; // 'image' | 'video' | 'certificate'
   isStatic?: boolean;
+  certificateType?: 'astrology' | 'vastu';
 }
 
-// Static pre-seeded gallery items (certificates & astrologer photo)
-const STATIC_ITEMS: GalleryEntry[] = [
+// Static pre-seeded gallery items (astrologer photo)
+const STATIC_PHOTO_ITEMS: GalleryEntry[] = [
   {
     id: 'static-astrologer-photo',
     name: 'Vijay Sawkar – Vedic Astrologer',
@@ -25,19 +27,25 @@ const STATIC_ITEMS: GalleryEntry[] = [
     type: 'image',
     isStatic: true,
   },
+];
+
+// Static certificate entries (rendered as HTML components, not images)
+const STATIC_CERTIFICATE_ITEMS: GalleryEntry[] = [
   {
     id: 'static-astrology-certificate',
-    name: 'Astrology Advance Certificate',
-    url: '/assets/generated/astrology-advance-certificate.dim_1080x760.jpg',
-    type: 'image',
+    name: 'Astrology Advance Course (Vedic+KP+Nadi)',
+    url: '',
+    type: 'certificate',
     isStatic: true,
+    certificateType: 'astrology',
   },
   {
     id: 'static-vastu-certificate',
-    name: 'Vastu Advance Certificate',
-    url: '/assets/generated/vastu-advance-certificate.dim_1080x760.jpg',
-    type: 'image',
+    name: 'Vastu Advance Course',
+    url: '',
+    type: 'certificate',
     isStatic: true,
+    certificateType: 'vastu',
   },
 ];
 
@@ -88,13 +96,21 @@ export default function Gallery() {
     isStatic: false,
   }));
 
-  const allItems: GalleryEntry[] = [...STATIC_ITEMS, ...backendEntries];
+  const allItems: GalleryEntry[] = [
+    ...STATIC_PHOTO_ITEMS,
+    ...STATIC_CERTIFICATE_ITEMS,
+    ...backendEntries,
+  ];
 
   const filteredItems = allItems.filter(item => {
     if (filter === 'photos') return item.type === 'image';
     if (filter === 'videos') return item.type === 'video';
-    return true;
+    if (filter === 'certificates') return item.type === 'certificate';
+    return true; // 'all'
   });
+
+  // For lightbox, only show non-certificate items (images/videos)
+  const lightboxItems = filteredItems.filter(item => item.type !== 'certificate');
 
   // Upload gallery item
   const uploadMutation = useMutation({
@@ -140,20 +156,31 @@ export default function Gallery() {
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
-  const openLightbox = (index: number) => setLightboxIndex(index);
+  const openLightbox = (item: GalleryEntry) => {
+    const idx = lightboxItems.findIndex(i => i.id === item.id);
+    if (idx !== -1) setLightboxIndex(idx);
+  };
+
   const closeLightbox = () => setLightboxIndex(null);
 
   const prevItem = () => {
     if (lightboxIndex === null) return;
-    setLightboxIndex((lightboxIndex - 1 + filteredItems.length) % filteredItems.length);
+    setLightboxIndex((lightboxIndex - 1 + lightboxItems.length) % lightboxItems.length);
   };
 
   const nextItem = () => {
     if (lightboxIndex === null) return;
-    setLightboxIndex((lightboxIndex + 1) % filteredItems.length);
+    setLightboxIndex((lightboxIndex + 1) % lightboxItems.length);
   };
 
-  const currentItem = lightboxIndex !== null ? filteredItems[lightboxIndex] : null;
+  const currentLightboxItem = lightboxIndex !== null ? lightboxItems[lightboxIndex] : null;
+
+  const filterTabs: { key: FilterType; label: string }[] = [
+    { key: 'all', label: 'All' },
+    { key: 'photos', label: 'Photos' },
+    { key: 'certificates', label: 'Certificates' },
+    { key: 'videos', label: 'Videos' },
+  ];
 
   return (
     <main className="min-h-screen bg-background">
@@ -174,17 +201,17 @@ export default function Gallery() {
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
           {/* Filter Tabs */}
           <div className="flex items-center gap-1 bg-muted rounded-lg p-1">
-            {(['all', 'photos', 'videos'] as FilterType[]).map(tab => (
+            {filterTabs.map(tab => (
               <button
-                key={tab}
-                onClick={() => setFilter(tab)}
+                key={tab.key}
+                onClick={() => setFilter(tab.key)}
                 className={`px-4 py-1.5 rounded-md text-sm font-medium capitalize transition-colors ${
-                  filter === tab
+                  filter === tab.key
                     ? 'bg-background text-foreground shadow-sm'
                     : 'text-muted-foreground hover:text-foreground'
                 }`}
               >
-                {tab}
+                {tab.label}
               </button>
             ))}
           </div>
@@ -230,45 +257,58 @@ export default function Gallery() {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {filteredItems.map((item, index) => (
-              <div
-                key={item.id}
-                className="relative group rounded-xl overflow-hidden bg-muted cursor-pointer"
-                onClick={() => openLightbox(index)}
-              >
-                {item.type === 'video' ? (
-                  <video
-                    src={item.url}
-                    className="w-full h-full object-contain"
-                    muted
-                    playsInline
-                  />
-                ) : (
-                  <img
-                    src={item.url}
-                    alt={item.name}
-                    className="w-full h-auto object-contain"
-                  />
-                )}
-                {/* Subtle hover overlay — no text overlays on images */}
-                <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity" />
-                {item.type === 'video' && (
-                  <div className="absolute top-2 left-2 bg-black/60 rounded-full p-1">
-                    <Video className="h-3.5 w-3.5 text-white" />
+            {filteredItems.map((item) => (
+              <div key={item.id} className="relative group">
+                {item.type === 'certificate' ? (
+                  /* Certificate card — rendered as HTML, no lightbox */
+                  <div className="rounded-xl overflow-hidden border border-cosmic-gold/30 shadow-lg hover:shadow-cosmic-gold/20 hover:border-cosmic-gold/60 transition-all duration-300">
+                    <CertificateCard type={item.certificateType!} />
+                    <div className="bg-cosmic-navy/80 px-4 py-2 flex items-center gap-2">
+                      <Award className="h-4 w-4 text-cosmic-gold shrink-0" />
+                      <span className="text-sm text-foreground/90 font-medium truncate">{item.name}</span>
+                    </div>
                   </div>
-                )}
-                {/* Only show delete button for non-static (backend-uploaded) items */}
-                {isAdmin && identity && !item.isStatic && (
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      deleteMutation.mutate(item.id);
-                    }}
-                    disabled={deleteMutation.isPending}
-                    className="absolute top-2 right-2 p-1.5 bg-red-600 rounded-full text-white hover:bg-red-700 transition-colors opacity-0 group-hover:opacity-100"
+                ) : (
+                  /* Photo / video card — opens lightbox */
+                  <div
+                    className="relative rounded-xl overflow-hidden bg-muted cursor-pointer"
+                    onClick={() => openLightbox(item)}
                   >
-                    <Trash2 className="h-3.5 w-3.5" />
-                  </button>
+                    {item.type === 'video' ? (
+                      <video
+                        src={item.url}
+                        className="w-full h-full object-contain"
+                        muted
+                        playsInline
+                      />
+                    ) : (
+                      <img
+                        src={item.url}
+                        alt={item.name}
+                        className="w-full h-auto object-contain"
+                      />
+                    )}
+                    {/* Hover overlay */}
+                    <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    {item.type === 'video' && (
+                      <div className="absolute top-2 left-2 bg-black/60 rounded-full p-1">
+                        <Video className="h-3.5 w-3.5 text-white" />
+                      </div>
+                    )}
+                    {/* Delete button for non-static backend items */}
+                    {isAdmin && identity && !item.isStatic && (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          deleteMutation.mutate(item.id);
+                        }}
+                        disabled={deleteMutation.isPending}
+                        className="absolute top-2 right-2 p-1.5 bg-red-600 rounded-full text-white hover:bg-red-700 transition-colors opacity-0 group-hover:opacity-100"
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </button>
+                    )}
+                  </div>
                 )}
               </div>
             ))}
@@ -276,8 +316,8 @@ export default function Gallery() {
         )}
       </section>
 
-      {/* Lightbox — shows image exactly as-is, no date/year overlays */}
-      {currentItem && (
+      {/* Lightbox — images/videos only */}
+      {currentLightboxItem && (
         <div
           className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4"
           onClick={closeLightbox}
@@ -289,7 +329,7 @@ export default function Gallery() {
             <X className="h-6 w-6" />
           </button>
 
-          {filteredItems.length > 1 && (
+          {lightboxItems.length > 1 && (
             <>
               <button
                 className="absolute left-4 top-1/2 -translate-y-1/2 text-white/80 hover:text-white p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
@@ -310,17 +350,17 @@ export default function Gallery() {
             className="max-w-5xl max-h-[90vh] w-full flex flex-col items-center"
             onClick={(e) => e.stopPropagation()}
           >
-            {currentItem.type === 'video' ? (
+            {currentLightboxItem.type === 'video' ? (
               <video
-                src={currentItem.url}
+                src={currentLightboxItem.url}
                 controls
                 autoPlay
                 className="max-h-[88vh] max-w-full rounded-lg"
               />
             ) : (
               <img
-                src={currentItem.url}
-                alt={currentItem.name}
+                src={currentLightboxItem.url}
+                alt={currentLightboxItem.name}
                 className="max-h-[88vh] max-w-full object-contain rounded-lg"
               />
             )}

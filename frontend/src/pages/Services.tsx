@@ -23,7 +23,6 @@ const services = [
     ],
     duration: '90 minutes',
     modes: ['In-Person (Margao Office)', 'Video Call', 'Phone Call'],
-    price: 'Starting ₹2,100',
     popular: true
   },
   {
@@ -42,7 +41,6 @@ const services = [
     ],
     duration: '2-3 hours on-site',
     modes: ['In-Person (Margao Office)', 'Video Consultation with floor plans'],
-    price: 'Starting ₹5,100',
     popular: false
   },
   {
@@ -62,26 +60,6 @@ const services = [
     ],
     duration: '3 months',
     modes: ['In-Person (Margao Office)', 'Online Live Sessions'],
-    price: 'Contact for details',
-    popular: false
-  },
-  {
-    id: 'numerology',
-    title: 'Numerology',
-    subtitle: 'Decode Your Life Path Through Numbers',
-    icon: '🔢',
-    description: 'Discover the hidden patterns in your life through the mystical science of numbers. Numerology reveals your life path, destiny number, and personal year cycles to guide important decisions.',
-    includes: [
-      'Complete numerology profile',
-      'Life path number analysis',
-      'Destiny and soul urge numbers',
-      'Personal year and month cycles',
-      'Name correction recommendations',
-      'Lucky numbers and dates'
-    ],
-    duration: '60 minutes',
-    modes: ['In-Person (Margao Office)', 'Video Call', 'Phone Call'],
-    price: 'Starting ₹1,500',
     popular: false
   },
   {
@@ -100,7 +78,6 @@ const services = [
     ],
     duration: '45 minutes',
     modes: ['In-Person (Margao Office)', 'Video Call'],
-    price: 'Starting ₹800',
     popular: false
   },
   {
@@ -119,7 +96,6 @@ const services = [
     ],
     duration: '60 minutes',
     modes: ['In-Person (Margao Office)', 'Video Call', 'Phone Call'],
-    price: 'Starting ₹1,800',
     popular: false
   }
 ];
@@ -270,7 +246,6 @@ function VastuCertificates() {
                 alt={cert.alt}
                 className="w-full h-auto object-contain"
                 onError={(e) => {
-                  // If static fallback also fails, show a placeholder
                   const target = e.currentTarget;
                   target.style.display = 'none';
                   const parent = target.parentElement;
@@ -386,8 +361,7 @@ export default function Services() {
                 <h3 className="text-xl font-display font-bold text-foreground mb-1">{service.title}</h3>
                 <p className="text-sm text-primary mb-3">{service.subtitle}</p>
                 <p className="text-muted-foreground text-sm mb-4 line-clamp-3">{service.description}</p>
-                <div className="flex items-center justify-between">
-                  <span className="text-primary font-semibold">{service.price}</span>
+                <div className="flex items-center justify-end">
                   <ArrowRight className={`w-5 h-5 transition-transform ${selectedService === service.id ? 'rotate-90 text-primary' : 'text-muted-foreground'}`} />
                 </div>
               </div>
@@ -443,61 +417,106 @@ export default function Services() {
                     <ul className="space-y-1">
                       {selectedServiceData.modes.map((mode, index) => (
                         <li key={index} className="text-muted-foreground text-sm flex items-center gap-2">
-                          <span className="w-1.5 h-1.5 rounded-full bg-primary inline-block" />
+                          <span className="text-primary">•</span>
                           {mode}
                         </li>
                       ))}
                     </ul>
                   </div>
 
-                  <div className="pt-4 border-t border-border">
-                    <p className="text-2xl font-bold text-primary mb-4">{selectedServiceData.price}</p>
-                    <div className="flex gap-3">
-                      <a
-                        href="https://wa.me/919850454549"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
-                      >
-                        <MessageCircle className="w-4 h-4" />
-                        WhatsApp
-                      </a>
-                      <a
-                        href="tel:+919850454549"
-                        className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground px-4 py-2 rounded-lg text-sm font-medium transition-colors"
-                      >
-                        <Phone className="w-4 h-4" />
-                        Call Now
-                      </a>
-                    </div>
+                  <div className="pt-4 border-t border-border space-y-3">
+                    <a
+                      href="tel:+919850454549"
+                      className="flex items-center justify-center gap-2 w-full py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors"
+                    >
+                      <Phone className="w-4 h-4" />
+                      Call to Book
+                    </a>
+                    <a
+                      href="https://wa.me/919850454549"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-center gap-2 w-full py-3 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transition-colors"
+                    >
+                      <MessageCircle className="w-4 h-4" />
+                      WhatsApp
+                    </a>
                   </div>
                 </div>
               </div>
 
-              {/* Certificate photos — shown only for Vastu Advance Course */}
+              {/* Vastu Advance Course certificates */}
               {selectedServiceData.id === 'vastu-advance' && <VastuCertificates />}
             </div>
           </div>
         </section>
       )}
 
-      {/* CTA Section */}
-      <section className="py-20">
+      {/* Why Choose Us */}
+      <section className="py-16 bg-card/30">
         <div className="container mx-auto px-4">
-          <div className="text-center max-w-2xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-display font-bold text-foreground mb-4">Why Choose Our Services?</h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              With decades of experience and thousands of satisfied clients, we bring authentic Vedic wisdom to your modern life challenges.
+            </p>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                icon: '🎯',
+                title: 'Authentic Vedic Knowledge',
+                description: 'Our consultations are rooted in classical Vedic texts and time-tested methodologies, not modern interpretations.'
+              },
+              {
+                icon: '🤝',
+                title: 'Personalized Approach',
+                description: 'Every reading is unique to your birth chart and life circumstances. No generic predictions or one-size-fits-all solutions.'
+              },
+              {
+                icon: '🌟',
+                title: 'Proven Track Record',
+                description: 'Over 500,000 satisfied clients across India and internationally, with consistent accuracy and practical guidance.'
+              }
+            ].map((feature, index) => (
+              <div key={index} className="text-center p-6 bg-card border border-border rounded-xl">
+                <div className="text-4xl mb-4">{feature.icon}</div>
+                <h3 className="text-lg font-semibold text-foreground mb-2">{feature.title}</h3>
+                <p className="text-muted-foreground text-sm">{feature.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-16">
+        <div className="container mx-auto px-4">
+          <div className="bg-gradient-to-r from-primary/20 to-secondary/20 border border-primary/20 rounded-2xl p-12 text-center">
             <h2 className="text-3xl font-display font-bold text-foreground mb-4">
               Ready to Begin Your Journey?
             </h2>
-            <p className="text-muted-foreground mb-8">
-              Book a consultation today and take the first step towards clarity, harmony, and prosperity.
+            <p className="text-muted-foreground mb-8 max-w-2xl mx-auto">
+              Take the first step towards clarity and harmony. Book a consultation today and discover what the stars have in store for you.
             </p>
-            <a
-              href="/book-consultation"
-              className="inline-flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-3 rounded-full font-semibold transition-colors"
-            >
-              Book Consultation
-              <ArrowRight className="w-5 h-5" />
-            </a>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <a
+                href="/book-consultation"
+                className="inline-flex items-center gap-2 px-8 py-3 bg-primary text-primary-foreground rounded-lg font-medium hover:bg-primary/90 transition-colors"
+              >
+                Book a Consultation
+                <ArrowRight className="w-4 h-4" />
+              </a>
+              <a
+                href="https://wa.me/919850454549"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-8 py-3 bg-card border border-border text-foreground rounded-lg font-medium hover:bg-card/80 transition-colors"
+              >
+                <MessageCircle className="w-4 h-4" />
+                Chat on WhatsApp
+              </a>
+            </div>
           </div>
         </div>
       </section>

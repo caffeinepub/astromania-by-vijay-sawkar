@@ -1,5 +1,6 @@
-import { Star, Phone, ChevronRight } from 'lucide-react';
+import { Star, Phone, ChevronRight, Award } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
+import CertificateCard from '../components/CertificateCard';
 
 const credentials = [
   { icon: '🎓', title: 'Jyotish Visharad', org: 'Bharatiya Vidya Bhavan' },
@@ -157,8 +158,60 @@ export default function About() {
         </div>
       </section>
 
-      {/* Expertise Areas */}
+      {/* ── CREDENTIALS & CERTIFICATIONS (Vastu Shikhar) ── */}
       <section className="py-16 bg-cosmic-navy/20">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-cosmic-gold/30 bg-cosmic-gold/10 text-cosmic-gold text-sm font-medium mb-4">
+              <Award className="w-4 h-4" />
+              Vastu Shikhar Certifications
+            </div>
+            <h2 className="text-3xl font-display font-bold text-cosmic-gold mb-3">Credentials & Certifications</h2>
+            <p className="text-muted-foreground max-w-xl mx-auto">
+              Certified by Vastu Shikhar — a premier institution for Vedic sciences — under the mentorship of Acharya Pankaj
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* Astrology Certificate */}
+            <div className="flex flex-col gap-3">
+              <div className="rounded-xl overflow-hidden border border-cosmic-gold/30 shadow-xl hover:shadow-cosmic-gold/20 hover:border-cosmic-gold/60 transition-all duration-300">
+                <CertificateCard type="astrology" />
+              </div>
+              <div className="flex items-start gap-3 bg-cosmic-navy/50 border border-cosmic-gold/20 rounded-xl px-4 py-3">
+                <Award className="w-5 h-5 text-cosmic-gold shrink-0 mt-0.5" />
+                <div>
+                  <p className="font-semibold text-foreground text-sm">Astrology Advance Course (Vedic+KP+Nadi)</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">
+                    Issued by Vastu Shikhar · Acharya Pankaj, Founder &amp; Mentor
+                  </p>
+                  <p className="text-xs text-muted-foreground">REG. NO. - U96906UP2023PTC188821</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Vastu Certificate */}
+            <div className="flex flex-col gap-3">
+              <div className="rounded-xl overflow-hidden border border-cosmic-gold/30 shadow-xl hover:shadow-cosmic-gold/20 hover:border-cosmic-gold/60 transition-all duration-300">
+                <CertificateCard type="vastu" />
+              </div>
+              <div className="flex items-start gap-3 bg-cosmic-navy/50 border border-cosmic-gold/20 rounded-xl px-4 py-3">
+                <Award className="w-5 h-5 text-cosmic-gold shrink-0 mt-0.5" />
+                <div>
+                  <p className="font-semibold text-foreground text-sm">Vastu Advance Course</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">
+                    Issued by Vastu Shikhar · Acharya Pankaj, Founder &amp; Mentor
+                  </p>
+                  <p className="text-xs text-muted-foreground">REG. NO. - U96906UP2023PTC188821</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Expertise Areas */}
+      <section className="py-16">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-12">
             <h2 className="text-3xl font-display font-bold text-cosmic-gold mb-3">Areas of Expertise</h2>

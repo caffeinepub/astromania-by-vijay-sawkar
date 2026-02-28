@@ -1,10 +1,10 @@
 # Specification
 
 ## Summary
-**Goal:** Fix the Google Maps location link in the footer and replace placeholder div boxes in the Vastu Advance Course section with actual img elements on the Services page.
+**Goal:** Remove the Numerology service from the Services page and hide pricing information from all service listings.
 
 **Planned changes:**
-- Update the Google Maps link in the Footer component to point to the correct office address for Vijay Sawkar's practice, opening in a new tab with matching address text
-- Replace empty div placeholders in the Vastu Advance Course section of the Services page with `<img>` elements using descriptive alt text (e.g., "Course Photo 1", "Course Photo 2") and the available certificate images, preserving existing layout and styling
+- Remove the Numerology service card/entry from the Services page so it no longer appears
+- Hide price/cost display from all service entries on the Services page
 
-**User-visible outcome:** The footer location link now navigates to the correct business address, and the Vastu Advance Course section displays actual images (or clearly labeled img tags the user can fill in) instead of blank placeholder boxes.
+**User-visible outcome:** The Services page no longer shows the Numerology service, and no pricing information is displayed for any service.

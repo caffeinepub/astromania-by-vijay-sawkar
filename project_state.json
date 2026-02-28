@@ -1,33 +1,44 @@
 {
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
-  "summary": "New project",
+  "summary": "Project involves a services-based app/website. User is managing service listings including removing numerology service and hiding prices from all services.",
   "architectural_notes": [],
-  "known_issues": [
-    "Location link not updated as requested",
-    "Photos not updated as requested"
-  ],
-  "isFixRequest": true,
+  "known_issues": [],
+  "isFixRequest": false,
   "existing_features": [
     {
-      "id": "feature-update-the-google-maps-location-link-in-the-footer-component-frontend-src-components-footer-tsx-to-point-to-the-correct-office-address-for-vijay-sawkar-s-practice-ensure-the-link-opens-in-a-new-tab-and-displays-the-correct-address-text",
-      "title": "Update the Google Maps location link in the Footer component (frontend/src/components/Footer.tsx) to point to the correct office address for Vijay Sawkar's practice. Ensure the link opens in a new tab and displays the correct address text.",
+      "id": "feature-remove-the-numerology-service-entry-entirely-from-the-services-page-listing-so-it-no-longer-appears-to-users",
+      "title": "Remove the Numerology service entry entirely from the Services page listing so it no longer appears to users.",
       "reqIds": [
         "REQ-1"
       ],
       "version": 1
     },
     {
-      "id": "feature-in-the-services-page-frontend-src-pages-services-tsx-replace-the-placeholder-photo-boxes-in-the-vastu-advance-course-section-with-actual-uploaded-certificate-or-course-images-if-the-correct-image-files-cannot-be-determined-automatically-render-clearly-labeled-placeholder-img-tags-with-empty-src-attributes-and-alt-text-such-as-course-photo-1-and-course-photo-2-so-the-user-can-manually-supply-the-image-files",
-      "title": "In the Services page (frontend/src/pages/Services.tsx), replace the placeholder photo boxes in the Vastu Advance Course section with actual uploaded certificate or course images. If the correct image files cannot be determined automatically, render clearly labeled placeholder img tags with empty src attributes and alt text such as 'Course Photo 1' and 'Course Photo 2' so the user can manually supply the image files.",
+      "id": "feature-remove-the-price-pricing-display-from-all-service-entries-on-the-services-page-so-no-pricing-information-is-shown-to-users",
+      "title": "Remove the price/pricing display from all service entries on the Services page so no pricing information is shown to users.",
       "reqIds": [
         "REQ-2"
       ],
       "version": 1
     }
   ],
-  "new_feature_requests": [],
-  "projectName": "Fix location link and allow photo replacement in Services page",
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Remove numerology from services list",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-2",
+      "summary": "Remove price display from all services",
+      "reqIds": [],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "ASTROMANIA",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

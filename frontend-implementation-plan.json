@@ -1,38 +1,35 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Fix location link and allow photo replacement in Services page",
+  "title": "Remove Numerology service and hide prices from all services",
   "requirements": [
     {
       "id": "REQ-1",
-      "summary": "Update the Google Maps location link in the Footer component to point to the correct office address",
+      "summary": "Remove the Numerology service entry entirely from the Services page listing so it no longer appears to users.",
       "acceptanceCriteria": [
-        "The Google Maps link in the footer navigates to the correct business location",
-        "The link opens in a new tab",
-        "The displayed address text matches the actual location"
-      ],
-      "file_operations": [
-        {
-          "path": "frontend/src/components/Footer.tsx",
-          "operation": "modify",
-          "description": "Update the Google Maps location link to point to Vijay Sawkar's correct office address. Ensure the link opens in a new tab with target='_blank' and rel='noopener noreferrer'. Update the displayed address text to match the actual business location. The link currently uses a placeholder Maps URL that needs to be replaced with the correct coordinates or address for the practice location."
-        }
-      ]
-    },
-    {
-      "id": "REQ-2",
-      "summary": "Replace placeholder photo boxes with actual certificate images in the Vastu Advance Course section",
-      "acceptanceCriteria": [
-        "The Vastu Advance Course section in Services.tsx shows actual img elements instead of empty div placeholders",
-        "Each img element has a descriptive alt attribute",
-        "If images are not available, the img src attributes are clearly marked so the user can supply the correct file paths",
-        "The layout and styling of the image containers is preserved"
+        "The Numerology service card/section is not visible on the Services page.",
+        "No reference to Numerology appears in the services list."
       ],
       "file_operations": [
         {
           "path": "frontend/src/pages/Services.tsx",
           "operation": "modify",
-          "description": "In the Vastu Advance Course section, replace the placeholder photo boxes (currently rendered as empty div elements) with actual img elements. Use the generated certificate images available at frontend/public/assets/generated/vastu-advance-cert-1.dim_1080x763.jpg and frontend/public/assets/generated/vastu-advance-cert-2.dim_1080x763.jpg. Each img element should have descriptive alt text like 'Vastu Advance Course Certificate 1' and 'Vastu Advance Course Certificate 2'. Preserve the existing layout structure and cosmic dark theme styling for the image containers. Ensure the images are properly sized and displayed within the course section."
+          "description": "Remove the Numerology service from the services array or filter it out before rendering so it no longer appears in the services list on the page."
+        }
+      ]
+    },
+    {
+      "id": "REQ-2",
+      "summary": "Remove the price/pricing display from all service entries on the Services page so no pricing information is shown to users.",
+      "acceptanceCriteria": [
+        "No price, fee, or cost information is displayed for any service on the Services page.",
+        "All other service details (name, description, features) remain intact."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/pages/Services.tsx",
+          "operation": "modify",
+          "description": "Remove or conditionally hide any price, fee, or cost display elements from the service cards/entries so pricing information is not shown to users while preserving all other service details such as name, description, and features."
         }
       ]
     }

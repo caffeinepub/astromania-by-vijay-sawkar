@@ -22,8 +22,8 @@ const quickLinks = [
   { label: 'Contact', path: '/contact' },
 ];
 
-// Google Maps search URL for Margao, South Goa, India
-const MAPS_URL = 'https://www.google.com/maps/search/Margao,+South+Goa,+Goa,+India';
+// Specific Google Maps location URL provided by the site owner
+const MAPS_URL = 'https://maps.app.goo.gl/i32yhyBr9B47Sg9T7';
 
 export default function Footer() {
   const year = new Date().getFullYear();
