@@ -5,7 +5,6 @@ import { ThemeProvider } from 'next-themes';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import Home from './pages/Home';
-import About from './pages/About';
 import Services from './pages/Services';
 import Gallery from './pages/Gallery';
 import GemstoneShop from './pages/GemstoneShop';
@@ -30,7 +29,6 @@ function Layout() {
 const rootRoute = createRootRoute({ component: Layout });
 
 const indexRoute = createRoute({ getParentRoute: () => rootRoute, path: '/', component: Home });
-const aboutRoute = createRoute({ getParentRoute: () => rootRoute, path: '/about', component: About });
 const servicesRoute = createRoute({ getParentRoute: () => rootRoute, path: '/services', component: Services });
 const galleryRoute = createRoute({ getParentRoute: () => rootRoute, path: '/gallery', component: Gallery });
 const gemstonesRoute = createRoute({ getParentRoute: () => rootRoute, path: '/gemstones', component: GemstoneShop });
@@ -40,7 +38,6 @@ const bookRoute = createRoute({ getParentRoute: () => rootRoute, path: '/book-co
 
 const routeTree = rootRoute.addChildren([
   indexRoute,
-  aboutRoute,
   servicesRoute,
   galleryRoute,
   gemstonesRoute,

@@ -24,7 +24,6 @@ const GEMSTONE_IMAGES: Record<string, string> = {
   coral: '/assets/generated/gemstone-coral.dim_400x400.png',
   hessonite: '/assets/generated/gemstone-hessonite.dim_400x400.png',
   'cats-eye': '/assets/generated/gemstone-cats-eye.dim_400x400.png',
-  diamond: '/assets/generated/gemstone-diamond.dim_400x400.png',
 };
 
 const GEMSTONES: GemstoneItem[] = [
@@ -132,19 +131,6 @@ const GEMSTONES: GemstoneItem[] = [
     emoji: '🟡',
     image: GEMSTONE_IMAGES['cats-eye'],
   },
-  {
-    id: 'diamond',
-    name: 'Diamond',
-    sanskritName: 'Heera',
-    planet: 'Venus',
-    price: '5000 rs/ratti onwards',
-    description: 'The gemstone of Venus, Diamond enhances beauty, luxury, love, and artistic talents.',
-    benefits: ['Enhances beauty & charm', 'Attracts luxury & wealth', 'Strengthens relationships', 'Boosts creativity'],
-    weightOptions: ['0.5 ratti', '1 ratti', '1.5 ratti', '2 ratti'],
-    color: '#C9A84C',
-    emoji: '💎',
-    image: GEMSTONE_IMAGES['diamond'],
-  },
 ];
 
 type CartEntry = {
@@ -223,7 +209,7 @@ export default function GemstoneShop() {
             Gemstone Shop
           </h1>
           <p className="text-muted-foreground max-w-2xl mx-auto mb-6">
-            Authentic, certified Vedic gemstones personally selected and recommended by Vijay Sawkar for planetary remedies and cosmic alignment.
+            Authentic, certified Vedic gemstones personally selected and recommended for planetary remedies and cosmic alignment.
           </p>
           <div className="flex items-center justify-center gap-6 text-sm text-muted-foreground">
             <span className="flex items-center gap-1"><Shield className="w-4 h-4 text-cosmic-gold" /> Certified Authentic</span>
@@ -402,28 +388,28 @@ export default function GemstoneShop() {
               <>
                 <div className="flex-1 p-4 space-y-4">
                   {cart.map(entry => (
-                    <div key={`${entry.gemstone.id}-${entry.weight}`} className="flex gap-3 bg-cosmic-navy/60 border border-cosmic-gold/20 rounded-xl p-3">
+                    <div key={`${entry.gemstone.id}-${entry.weight}`} className="flex items-center gap-3 bg-cosmic-navy/60 border border-cosmic-gold/15 rounded-xl p-3">
                       <img
                         src={entry.gemstone.image}
                         alt={entry.gemstone.name}
-                        className="w-14 h-14 rounded-lg object-cover shrink-0"
+                        className="w-14 h-14 rounded-lg object-cover border border-cosmic-gold/20 shrink-0"
                       />
                       <div className="flex-1 min-w-0">
-                        <p className="font-medium text-foreground text-sm truncate">{entry.gemstone.name}</p>
-                        <p className="text-xs text-muted-foreground">{entry.weight}</p>
-                        <div className="flex items-center gap-2 mt-2">
-                          <button onClick={() => updateQuantity(entry.gemstone.id, entry.weight, -1)} className="w-6 h-6 rounded-full border border-cosmic-gold/30 flex items-center justify-center text-cosmic-gold hover:bg-cosmic-gold/10 transition-colors">
+                        <p className="font-semibold text-sm text-foreground truncate">{entry.gemstone.name}</p>
+                        <p className="text-xs text-cosmic-cyan">{entry.weight}</p>
+                        <div className="flex items-center gap-2 mt-1">
+                          <button onClick={() => updateQuantity(entry.gemstone.id, entry.weight, -1)} className="w-5 h-5 rounded-full border border-cosmic-gold/30 flex items-center justify-center text-cosmic-gold hover:bg-cosmic-gold/10">
                             <Minus className="w-3 h-3" />
                           </button>
-                          <span className="text-sm text-foreground w-4 text-center">{entry.quantity}</span>
-                          <button onClick={() => updateQuantity(entry.gemstone.id, entry.weight, 1)} className="w-6 h-6 rounded-full border border-cosmic-gold/30 flex items-center justify-center text-cosmic-gold hover:bg-cosmic-gold/10 transition-colors">
+                          <span className="text-xs text-foreground">{entry.quantity}</span>
+                          <button onClick={() => updateQuantity(entry.gemstone.id, entry.weight, 1)} className="w-5 h-5 rounded-full border border-cosmic-gold/30 flex items-center justify-center text-cosmic-gold hover:bg-cosmic-gold/10">
                             <Plus className="w-3 h-3" />
-                          </button>
-                          <button onClick={() => removeFromCart(entry.gemstone.id, entry.weight)} className="ml-auto text-muted-foreground hover:text-destructive transition-colors">
-                            <X className="w-4 h-4" />
                           </button>
                         </div>
                       </div>
+                      <button onClick={() => removeFromCart(entry.gemstone.id, entry.weight)} className="text-muted-foreground hover:text-red-400 transition-colors shrink-0">
+                        <X className="w-4 h-4" />
+                      </button>
                     </div>
                   ))}
                 </div>

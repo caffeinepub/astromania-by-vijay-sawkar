@@ -1,10 +1,10 @@
 # Specification
 
 ## Summary
-**Goal:** Remove the Numerology service from the Services page and hide pricing information from all service listings.
+**Goal:** Update the "Happy Clients" statistic on the Testimonials page from "10,000+" to "500,000+".
 
 **Planned changes:**
-- Remove the Numerology service card/entry from the Services page so it no longer appears
-- Hide price/cost display from all service entries on the Services page
+- Update the Happy Clients count value in `frontend/src/pages/Testimonials.tsx` from "10,000+" (or any variant) to "500,000+"
+- Verify and update the same stat in `Home.tsx` if it references the same value
 
-**User-visible outcome:** The Services page no longer shows the Numerology service, and no pricing information is displayed for any service.
+**User-visible outcome:** The Testimonials page (and Home page if applicable) will correctly display "500,000+" for the Happy Clients count, with all other content and styling unchanged.

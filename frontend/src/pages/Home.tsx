@@ -20,19 +20,19 @@ const stats = [
 const testimonials = [
   {
     name: 'Priya Sharma',
-    text: 'Vijay ji\'s predictions were incredibly accurate. His guidance helped me make the right career decision.',
+    text: "Vijay ji's predictions were incredibly accurate. His guidance helped me make the right career decision.",
     rating: 5,
     service: 'Vedic Astrology',
   },
   {
     name: 'Rahul Mehta',
-    text: 'The Vastu consultation transformed our home. We\'ve seen remarkable improvements in family harmony.',
+    text: "The Vastu consultation transformed our home. We've seen remarkable improvements in family harmony.",
     rating: 5,
     service: 'Vastu Shastra',
   },
   {
     name: 'Sunita Patel',
-    text: 'The gemstone recommendation was spot on. I\'ve been wearing it for 6 months and the results are amazing.',
+    text: "The gemstone recommendation was spot on. I've been wearing it for 6 months and the results are amazing.",
     rating: 5,
     service: 'Gemstone Therapy',
   },

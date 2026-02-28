@@ -1,52 +1,35 @@
 {
   "kind": "build_request",
-  "title": "Remove Numerology service and hide prices from all services",
-  "projectName": "ASTROMANIA",
-  "priority": "normal",
+  "title": "Fix Happy Clients count in Testimonials page to show 500,000+",
+  "priority": "high",
   "requirements": [
     {
       "id": "REQ-1",
-      "text": "Remove the Numerology service entry entirely from the Services page listing so it no longer appears to users.",
+      "text": "In the Testimonials page (frontend/src/pages/Testimonials.tsx), update the 'Happy Clients' statistic value from '10,000+' (or any variant like '10000+') to '500,000+'. All other content, layout, styling, and functionality on the page must remain exactly as-is.",
       "target": "frontend",
       "source": {
         "messageIds": [
           "msg-4"
         ],
         "quotes": [
-          "remove numerology"
+          "When I open testimonials from the open links section, happy clients comes as 10000plus ,change it to 500000 plus rest everything should be same"
         ]
       },
       "acceptanceCriteria": [
-        "The Numerology service card/section is not visible on the Services page.",
-        "No reference to Numerology appears in the services list."
-      ]
-    },
-    {
-      "id": "REQ-2",
-      "text": "Remove the price/pricing display from all service entries on the Services page so no pricing information is shown to users.",
-      "target": "frontend",
-      "source": {
-        "messageIds": [
-          "msg-4"
-        ],
-        "quotes": [
-          "price of all the services"
-        ]
-      },
-      "acceptanceCriteria": [
-        "No price, fee, or cost information is displayed for any service on the Services page.",
-        "All other service details (name, description, features) remain intact."
+        "The Testimonials page displays '500,000+' (or '500000+') for the Happy Clients count.",
+        "No other text, card, rating, layout, or styling on the Testimonials page is changed.",
+        "The Home page (Home.tsx) Happy Clients count is also verified to show '500,000+' if it references the same stat."
       ]
     }
   ],
   "constraints": [
-    "Do not remove or modify any other services besides Numerology.",
-    "Do not alter the backend data schema or service records — changes are frontend display only."
+    "Do not change any other content, layout, or styling on the Testimonials page.",
+    "Only update the Happy Clients numeric value — no other modifications."
   ],
   "nonGoals": [
-    "Removing prices from the Home page services grid or any other page.",
-    "Modifying the backend actor or stored service data.",
-    "Changing any other content or layout of the Services page."
+    "Redesigning or restyling the Testimonials page.",
+    "Adding or removing testimonial cards.",
+    "Modifying backend data or any other pages beyond the Happy Clients count fix."
   ],
   "imageRequirements": {
     "required": [],

@@ -115,7 +115,7 @@ export default function Testimonials() {
         <div className="container mx-auto">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
             {[
-              { value: '10,000+', label: 'Happy Clients' },
+              { value: '500,000+', label: 'Happy Clients' },
               { value: '20+', label: 'Years Experience' },
               { value: '98%', label: 'Satisfaction Rate' },
               { value: '50+', label: 'Cities Served' },

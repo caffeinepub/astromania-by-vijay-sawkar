@@ -1,35 +1,26 @@
 {
   "kind": "implementation_plan",
   "version": "1.0",
-  "title": "Remove Numerology service and hide prices from all services",
+  "title": "Fix Happy Clients count in Testimonials page to show 500,000+",
   "requirements": [
     {
       "id": "REQ-1",
-      "summary": "Remove the Numerology service entry entirely from the Services page listing so it no longer appears to users.",
+      "summary": "Update the Happy Clients statistic value from '10,000+' to '500,000+' in the Testimonials page while keeping all other content unchanged",
       "acceptanceCriteria": [
-        "The Numerology service card/section is not visible on the Services page.",
-        "No reference to Numerology appears in the services list."
+        "The Testimonials page displays '500,000+' (or '500000+') for the Happy Clients count.",
+        "No other text, card, rating, layout, or styling on the Testimonials page is changed.",
+        "The Home page (Home.tsx) Happy Clients count is also verified to show '500,000+' if it references the same stat."
       ],
       "file_operations": [
         {
-          "path": "frontend/src/pages/Services.tsx",
+          "path": "frontend/src/pages/Testimonials.tsx",
           "operation": "modify",
-          "description": "Remove the Numerology service from the services array or filter it out before rendering so it no longer appears in the services list on the page."
-        }
-      ]
-    },
-    {
-      "id": "REQ-2",
-      "summary": "Remove the price/pricing display from all service entries on the Services page so no pricing information is shown to users.",
-      "acceptanceCriteria": [
-        "No price, fee, or cost information is displayed for any service on the Services page.",
-        "All other service details (name, description, features) remain intact."
-      ],
-      "file_operations": [
+          "description": "Update the Happy Clients statistic value from '10,000+' (or any variant like '10000+') to '500,000+'. Locate the stats section that displays the Happy Clients count and change only that numeric value, preserving all other content, styling, and layout exactly as-is."
+        },
         {
-          "path": "frontend/src/pages/Services.tsx",
+          "path": "frontend/src/pages/Home.tsx",
           "operation": "modify",
-          "description": "Remove or conditionally hide any price, fee, or cost display elements from the service cards/entries so pricing information is not shown to users while preserving all other service details such as name, description, and features."
+          "description": "Verify and update the Happy Clients count to '500,000+' if it exists on the Home page. If the Home page displays a similar statistic, ensure consistency by updating it to match the new value. If no such stat exists, no changes are needed."
         }
       ]
     }

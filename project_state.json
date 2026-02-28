@@ -1,44 +1,25 @@
 {
   "schemaVersion": "1.0.0",
   "projectStateVersion": 3,
-  "summary": "Project involves a services-based app/website. User is managing service listings including removing numerology service and hiding prices from all services.",
+  "summary": "Project involves a website/app with a testimonials section. The happy clients count needs to be updated from 10,000+ to 500,000+.",
   "architectural_notes": [],
-  "known_issues": [],
-  "isFixRequest": false,
+  "known_issues": [
+    "Testimonials section shows 10,000+ for happy clients count instead of the intended 500,000+"
+  ],
+  "isFixRequest": true,
   "existing_features": [
     {
-      "id": "feature-remove-the-numerology-service-entry-entirely-from-the-services-page-listing-so-it-no-longer-appears-to-users",
-      "title": "Remove the Numerology service entry entirely from the Services page listing so it no longer appears to users.",
+      "id": "feature-in-the-testimonials-page-frontend-src-pages-testimonials-tsx-update-the-happy-clients-statistic-value-from-10-000-or-any-variant-like-10000-to-500-000-all-other-content-layout-styling-and-functionality-on-the-page-must-remain-exactly-as-is",
+      "title": "In the Testimonials page (frontend/src/pages/Testimonials.tsx), update the 'Happy Clients' statistic value from '10,000+' (or any variant like '10000+') to '500,000+'. All other content, layout, styling, and functionality on the page must remain exactly as-is.",
       "reqIds": [
         "REQ-1"
       ],
       "version": 1
-    },
-    {
-      "id": "feature-remove-the-price-pricing-display-from-all-service-entries-on-the-services-page-so-no-pricing-information-is-shown-to-users",
-      "title": "Remove the price/pricing display from all service entries on the Services page so no pricing information is shown to users.",
-      "reqIds": [
-        "REQ-2"
-      ],
-      "version": 1
     }
   ],
-  "new_feature_requests": [
-    {
-      "id": "AR-1",
-      "summary": "Remove numerology from services list",
-      "reqIds": [],
-      "status": "pending"
-    },
-    {
-      "id": "AR-2",
-      "summary": "Remove price display from all services",
-      "reqIds": [],
-      "status": "pending"
-    }
-  ],
+  "new_feature_requests": [],
   "gameProjectType": "none",
-  "projectName": "ASTROMANIA",
+  "projectName": "Fix Happy Clients count in Testimonials page to show 500,000+",
   "clarification_mode": "instant",
   "clarification_rounds": 0
 }

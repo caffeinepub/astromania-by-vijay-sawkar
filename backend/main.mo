@@ -1,5 +1,6 @@
 import Time "mo:core/Time";
 import Map "mo:core/Map";
+import Int "mo:core/Int";
 import Principal "mo:core/Principal";
 import Runtime "mo:core/Runtime";
 import MixinStorage "blob-storage/Mixin";
@@ -10,6 +11,7 @@ import AccessControl "authorization/access-control";
 actor {
   include MixinStorage();
 
+  // Initialize the user system state
   let accessControlState = AccessControl.initState();
   include MixinAuthorization(accessControlState);
 
@@ -148,7 +150,7 @@ actor {
     if (not (AccessControl.hasPermission(accessControlState, caller, #user))) {
       Runtime.trap("Unauthorized: Only authenticated users can add reviews");
     };
-    let key = review.productId # review.reviewerName # Int.toText(review.timestamp);
+    let key = review.productId # review.reviewerName # review.timestamp.toText();
     reviews.add(key, review);
   };
 
@@ -172,7 +174,7 @@ actor {
 
   // Booking Requests - anyone can submit (public form), admin can read all
   public shared func submitBookingRequest(request : BookingRequest) : async () {
-    let key = Int.toText(request.timestamp) # request.phone;
+    let key = request.timestamp.toText() # request.phone;
     bookingRequests.add(key, request);
   };
 
@@ -185,7 +187,7 @@ actor {
 
   // Contact Submissions - anyone can submit (public form), admin can read all
   public shared func submitContactForm(submission : ContactSubmission) : async () {
-    let key = Int.toText(submission.timestamp) # submission.email;
+    let key = submission.timestamp.toText() # submission.email;
     contactSubmissions.add(key, submission);
   };
 

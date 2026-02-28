@@ -13,7 +13,6 @@ const services = [
 
 const quickLinks = [
   { label: 'Home', path: '/' },
-  { label: 'About', path: '/about' },
   { label: 'Services', path: '/services' },
   { label: 'Gallery', path: '/gallery' },
   { label: 'Gemstone Shop', path: '/gemstones' },
@@ -42,7 +41,6 @@ export default function Footer() {
             />
             <div>
               <p className="font-bold text-cosmic-gold leading-tight">Astro-Vastu Knowledge</p>
-              <p className="text-xs text-muted-foreground">Vijay Sawkar</p>
             </div>
           </Link>
           <p className="text-sm text-muted-foreground leading-relaxed mb-5">
@@ -130,7 +128,7 @@ export default function Footer() {
       {/* Bottom Bar */}
       <div className="border-t border-cosmic-gold/10 py-5">
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-muted-foreground">
-          <p>© {year} Astro-Vastu Knowledge · Vijay Sawkar. All rights reserved.</p>
+          <p>© {year} Astro-Vastu Knowledge. All rights reserved.</p>
           <p className="flex items-center gap-1">
             Built with <Heart className="w-3 h-3 text-cosmic-gold fill-cosmic-gold" /> using{' '}
             <a

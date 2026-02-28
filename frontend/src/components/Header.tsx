@@ -6,7 +6,6 @@ import { useQueryClient } from '@tanstack/react-query';
 
 const navLinks = [
   { label: 'Home', path: '/' },
-  { label: 'About', path: '/about' },
   { label: 'Services', path: '/services' },
   { label: 'Gallery', path: '/gallery' },
   { label: 'Gemstones', path: '/gemstones' },
@@ -62,7 +61,6 @@ export default function Header() {
           </div>
           <div className="hidden sm:block">
             <p className="text-sm font-bold text-cosmic-gold leading-tight tracking-wide">Astro-Vastu Knowledge</p>
-            <p className="text-xs text-muted-foreground leading-tight tracking-wider uppercase">Vijay Sawkar</p>
           </div>
         </Link>
 
